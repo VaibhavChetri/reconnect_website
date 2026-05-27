@@ -65,10 +65,12 @@ export default function PsychologyPage() {
               </p>
             </div>
             <div className="w-full md:w-1/2">
-              <div className="bg-on-primary/10 rounded-2xl aspect-[4/3] flex items-center justify-center p-8">
-                <p className="text-body-md text-on-primary/60 text-center">
-                  Person sitting peacefully in a sunlit room, practising mindful breathing with eyes closed
-                </p>
+              <div className="rounded-2xl aspect-[4/3] overflow-hidden">
+                <img
+                  src="/virtual-coaching.jpg"
+                  alt="Patient having a virtual coaching session with a wellness professional"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
           </div>
@@ -160,10 +162,12 @@ export default function PsychologyPage() {
               </div>
             </div>
             <div className="w-full md:w-1/2 order-1 md:order-2">
-              <div className="bg-surface-container-high rounded-2xl aspect-[4/3] flex items-center justify-center p-8">
-                <p className="text-body-md text-on-surface-variant text-center">
-                  Illustration of the fear-avoidance cycle being broken through graded movement
-                </p>
+              <div className="rounded-2xl aspect-[4/3] overflow-hidden">
+                <img
+                  src="/yoga-stretching.jpg"
+                  alt="Woman performing a gentle yoga stretch, demonstrating mindful movement"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
           </div>

@@ -19,7 +19,8 @@ const testimonials = [
       "I had accepted that morning walks were behind me. My knees would swell after ten minutes. Now I walk 4 km every morning before breakfast.",
     story:
       "Rajesh was diagnosed with bilateral knee osteoarthritis three years ago. He had been told to rest, lose weight, and consider a knee replacement. After 12 weeks on the Care plan, his pain dropped from 8 out of 10 to 2 out of 10. He lost 6 kg, regained full walking capacity, and postponed surgery indefinitely — with his orthopaedic surgeon's approval.",
-    imagePlaceholder: "Portrait of a 58-year-old man walking outdoors in morning light",
+    image: "/testimonial-rajesh.jpg",
+    imageAlt: "Rajesh Sharma, 58, who overcame knee osteoarthritis with Reconnect",
   },
   {
     name: "Meera Raghavan",
@@ -32,7 +33,8 @@ const testimonials = [
       "The moment I picked up my daughter without wincing, I cried. I had not been able to do that in two years.",
     story:
       "Meera had been living with chronic lower back pain after two disc bulges. She was on daily painkillers and muscle relaxants, and had stopped exercising entirely out of fear. Through Reconnect's graded strength program and coaching, she rebuilt her core and posterior chain. Her physician reduced her medications by 80 percent, and she returned to an active life with her family.",
-    imagePlaceholder: "Portrait of a 42-year-old woman smiling with her young daughter",
+    image: "/testimonial-meera.jpg",
+    imageAlt: "Meera Raghavan, 42, who recovered from chronic back pain with Reconnect",
   },
   {
     name: "Amit Kapoor",
@@ -45,7 +47,8 @@ const testimonials = [
       "I was terrified of fractures. Now I lift weights three times a week, and my bone density scan actually improved. My doctor could not believe it.",
     story:
       "Amit was diagnosed with osteoporosis after a routine DEXA scan. He was afraid to do anything physical — even carrying groceries felt risky. Reconnect's program introduced progressive resistance training under medical supervision. After six months, his follow-up DEXA scan showed measurable improvement in T-Score. More importantly, he regained the confidence to live independently.",
-    imagePlaceholder: "Portrait of a 65-year-old man confidently holding light dumbbells",
+    image: "/testimonial-amit.jpg",
+    imageAlt: "Amit Kapoor, 65, who improved his bone density with Reconnect",
   },
 ];
 
@@ -83,10 +86,12 @@ export default function TestimonialsPage() {
               >
                 {/* Image + metric */}
                 <div className="w-full md:w-5/12">
-                  <div className="bg-surface-container-high rounded-2xl aspect-[4/5] flex items-center justify-center p-8 mb-4">
-                    <p className="text-body-md text-on-surface-variant text-center">
-                      {t.imagePlaceholder}
-                    </p>
+                  <div className="rounded-2xl aspect-[4/5] overflow-hidden mb-4">
+                    <img
+                      src={t.image}
+                      alt={t.imageAlt}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                   <div className="bg-surface-container-lowest rounded-xl hairline-border soft-shadow p-4 text-center">
                     <p className="text-headline-md-mobile text-primary font-bold">

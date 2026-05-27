@@ -207,10 +207,18 @@ function ResultCard({
         </button>
       </div>
 
-      <p className="text-caption text-on-surface-variant mt-6">
-        Our team will reach out to {formState.phone || "you"} within 24 hours to
-        discuss your plan in detail.
-      </p>
+      <div className="flex items-center gap-4 mt-8 p-4 bg-surface-container-low rounded-xl mx-auto max-w-sm">
+        <img
+          src="/dr-shruthi.jpg"
+          alt="Dr. Shruthi Desai"
+          className="w-14 h-14 rounded-full object-cover object-top border-2 border-primary-container/30 shrink-0"
+        />
+        <p className="text-body-md text-on-surface-variant text-left">
+          <span className="font-semibold text-on-surface">Dr. Shruthi</span> will
+          reach out to {formState.phone || "you"} within 24 hours to discuss your
+          plan.
+        </p>
+      </div>
     </div>
   );
 }

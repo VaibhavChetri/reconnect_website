@@ -65,10 +65,12 @@ export default function ExercisePage() {
               </p>
             </div>
             <div className="w-full md:w-1/2">
-              <div className="bg-on-primary/10 rounded-2xl aspect-[4/3] flex items-center justify-center p-8">
-                <p className="text-body-md text-on-primary/60 text-center">
-                  Person performing a guided resistance band squat with proper form and alignment cues
-                </p>
+              <div className="rounded-2xl aspect-[4/3] overflow-hidden">
+                <img
+                  src="/hero-resistance-band.jpg"
+                  alt="Man performing a guided resistance band exercise with proper form"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
           </div>
@@ -129,10 +131,12 @@ export default function ExercisePage() {
         <div className="max-w-[1200px] mx-auto px-5 md:px-16">
           <div className="flex flex-col md:flex-row gap-10 md:gap-16 items-center">
             <div className="w-full md:w-1/2">
-              <div className="bg-surface-container-high rounded-2xl aspect-[4/3] flex items-center justify-center p-8">
-                <p className="text-body-md text-on-surface-variant text-center">
-                  Screenshot of app showing a structured workout session with video guidance
-                </p>
+              <div className="rounded-2xl aspect-[4/3] overflow-hidden">
+                <img
+                  src="/kettlebell-squat.jpg"
+                  alt="Man performing a kettlebell goblet squat during a structured workout session"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
             <div className="w-full md:w-1/2">

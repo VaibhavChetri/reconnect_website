@@ -50,10 +50,12 @@ export default function MedicalPage() {
               </p>
             </div>
             <div className="w-full md:w-1/2">
-              <div className="bg-on-primary/10 rounded-2xl aspect-[4/3] flex items-center justify-center p-8">
-                <p className="text-body-md text-on-primary/60 text-center">
-                  Doctor reviewing patient records, X-rays, and mobility assessment notes
-                </p>
+              <div className="rounded-2xl aspect-[4/3] overflow-hidden">
+                <img
+                  src="/doctor-consultation.jpg"
+                  alt="Doctor consulting with a patient, reviewing their medical assessment"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
           </div>

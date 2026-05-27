@@ -35,12 +35,14 @@ export default function AboutPage() {
       <section className="py-16 md:py-24">
         <div className="max-w-[1200px] mx-auto px-5 md:px-16">
           <div className="flex flex-col md:flex-row gap-10 md:gap-16 items-center">
-            {/* Portrait placeholder */}
+            {/* Portrait */}
             <div className="w-full md:w-5/12">
-              <div className="bg-surface-container-high rounded-2xl aspect-[3/4] flex items-center justify-center p-8">
-                <p className="text-body-md text-on-surface-variant text-center">
-                  Portrait photograph of Dr. Shruthi Desai in clinical setting
-                </p>
+              <div className="rounded-2xl overflow-hidden aspect-[3/4] soft-shadow border border-surface-variant">
+                <img
+                  src="/dr-shruthi.jpg"
+                  alt="Dr. Shruthi Desai, Rheumatologist and founder of Reconnect Wellness"
+                  className="w-full h-full object-cover object-top"
+                />
               </div>
             </div>
 

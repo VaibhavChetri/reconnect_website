@@ -20,7 +20,8 @@ const steps = [
       "Safety protocol tailored to your medications",
       "Clear exercise readiness evaluation",
     ],
-    imagePlaceholder: "Doctor reviewing patient medical records and joint mobility assessment",
+    image: "/knee-examination.jpg",
+    imageAlt: "Clinical knee examination as part of a thorough medical assessment",
   },
   {
     number: "02",
@@ -34,7 +35,8 @@ const steps = [
       "Progressive loading that adapts to your pace",
       "Form feedback and movement corrections",
     ],
-    imagePlaceholder: "Person performing guided resistance band exercise with proper form",
+    image: "/trainer-guided-exercise.jpg",
+    imageAlt: "Trainer guiding a patient through a resistance band exercise with proper form",
   },
   {
     number: "03",
@@ -48,7 +50,8 @@ const steps = [
       "Indian meal plans you will actually follow",
       "Supplement guidance reviewed by your doctor",
     ],
-    imagePlaceholder: "Colorful Indian meal with anti-inflammatory ingredients like turmeric and greens",
+    image: "/woman-dumbbell-side.jpg",
+    imageAlt: "Woman performing a dumbbell curl as part of a strength and recovery program",
   },
   {
     number: "04",
@@ -62,7 +65,8 @@ const steps = [
       "One-on-one behavior change coaching",
       "Building lasting habits that stick",
     ],
-    imagePlaceholder: "Person meditating peacefully in a calm, sunlit room",
+    image: "/mat-stretching.jpg",
+    imageAlt: "Woman performing a gentle seated stretch on a mat, practising mindful movement",
   },
 ];
 
@@ -102,10 +106,12 @@ export default function HowItWorksPage() {
                 >
                   {/* Image placeholder */}
                   <div className="w-full md:w-1/2">
-                    <div className="bg-surface-container-high rounded-2xl aspect-[4/3] flex items-center justify-center p-8">
-                      <p className="text-body-md text-on-surface-variant text-center">
-                        {step.imagePlaceholder}
-                      </p>
+                    <div className="rounded-2xl aspect-[4/3] overflow-hidden">
+                      <img
+                        src={step.image}
+                        alt={step.imageAlt}
+                        className="w-full h-full object-cover"
+                      />
                     </div>
                   </div>
 

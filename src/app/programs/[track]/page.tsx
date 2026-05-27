@@ -11,6 +11,8 @@ type TrackData = {
   heroHeadline: string;
   heroSub: string;
   icon: string;
+  heroImage: string;
+  heroImageAlt: string;
   whoItsFor: {
     title: string;
     description: string;
@@ -43,6 +45,8 @@ const trackData: Record<string, TrackData> = {
     heroSub:
       "A proactive strength and mobility program designed by a rheumatologist to protect your joints, build bone density, and keep you moving with confidence \u2014 no matter your age.",
     icon: "shield",
+    heroImage: "/woman-dumbbell-side.jpg",
+    heroImageAlt: "Woman performing a dumbbell exercise as part of a proactive strength program",
     whoItsFor: [
       {
         title: "Age 30 \u2013 40",
@@ -124,6 +128,8 @@ const trackData: Record<string, TrackData> = {
     heroSub:
       "Targeted exercise protocols that work alongside your treatment to reduce pain, strengthen the muscles around affected joints, and restore the daily activities you\u2019ve been avoiding.",
     icon: "healing",
+    heroImage: "/hero-resistance-band.jpg",
+    heroImageAlt: "Man performing a resistance band exercise for joint pain management",
     whoItsFor: [
       {
         title: "Arthritis (OA)",
@@ -205,6 +211,8 @@ const trackData: Record<string, TrackData> = {
     heroSub:
       "Structured rehabilitation programs that guide you from post-op or post-injury back to full strength, with clear milestones and medical oversight every step of the way.",
     icon: "sprint",
+    heroImage: "/mat-stretching.jpg",
+    heroImageAlt: "Woman performing gentle recovery stretches on a mat",
     whoItsFor: [
       {
         title: "Ligament / ACL Rehab",
@@ -330,12 +338,13 @@ export default async function ProgramTrackPage({
               </div>
             </div>
 
-            {/* Image placeholder */}
             <div className="flex-1 max-w-md">
-              <div className="bg-surface-container-high/20 rounded-2xl aspect-[4/3] flex items-center justify-center">
-                <span className="material-symbols-outlined text-7xl text-on-primary/20">
-                  {data.icon}
-                </span>
+              <div className="rounded-2xl aspect-[4/3] overflow-hidden">
+                <img
+                  src={data.heroImage}
+                  alt={data.heroImageAlt}
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
           </div>

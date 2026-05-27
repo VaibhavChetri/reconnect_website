@@ -37,14 +37,11 @@ export default function Home() {
             </div>
             <div className="relative">
               <div className="aspect-[4/3] rounded-[24px] bg-secondary-container flex items-center justify-center overflow-hidden">
-                <div className="text-center p-8">
-                  <span className="material-symbols-outlined text-[64px] text-primary mb-3 block">
-                    fitness_center
-                  </span>
-                  <p className="text-label-md text-on-secondary-container">
-                    Hero image: Person doing guided strength exercise
-                  </p>
-                </div>
+                <img
+                  src="/woman-dumbbell.jpg"
+                  alt="Woman confidently performing a dumbbell exercise as part of a guided strength training program"
+                  className="w-full h-full object-cover"
+                />
               </div>
             </div>
           </div>
@@ -149,24 +146,24 @@ export default function Home() {
                 href: "/programs/prevent",
                 desc: "For those with early signs, family history, or age-related risk. Build strength before problems start.",
                 tags: ["Early arthritis", "Bone health", "40+"],
-                color: "bg-primary-fixed",
-                icon: "spa",
+                image: "/yoga-stretching.jpg",
+                imageAlt: "Woman performing a yoga stretch as part of a proactive joint health program",
               },
               {
                 title: "Manage",
                 href: "/programs/manage",
                 desc: "For those living with arthritis, joint pain, or disc issues. Manage symptoms and build resilience.",
                 tags: ["Active arthritis", "Joint pain", "Back pain"],
-                color: "bg-tertiary-fixed",
-                icon: "self_improvement",
+                image: "/trainer-guided-exercise.jpg",
+                imageAlt: "Trainer guiding a patient through a resistance band exercise",
               },
               {
                 title: "Recover",
                 href: "/programs/recover",
                 desc: "For post-surgery or severe degeneration. Rebuild strength safely under medical guidance.",
                 tags: ["Post-surgery", "Severe OA", "Rehab"],
-                color: "bg-secondary-container",
-                icon: "emergency",
+                image: "/knee-examination.jpg",
+                imageAlt: "Close-up of a knee examination during rehabilitation",
               },
             ].map((track) => (
               <Link
@@ -174,12 +171,12 @@ export default function Home() {
                 href={track.href}
                 className="group bg-surface-container-lowest rounded-[var(--radius-card)] overflow-hidden hairline-border soft-shadow transition-all duration-200 soft-shadow-hover hover:-translate-y-1 flex flex-col"
               >
-                <div
-                  className={`${track.color} h-48 flex items-center justify-center`}
-                >
-                  <span className="material-symbols-outlined text-[48px] text-primary opacity-60 group-hover:opacity-80 transition-opacity">
-                    {track.icon}
-                  </span>
+                <div className="h-48 overflow-hidden">
+                  <img
+                    src={track.image}
+                    alt={track.imageAlt}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
                 </div>
                 <div className="p-6 flex flex-col gap-3 flex-1">
                   <h3 className="text-title-lg text-on-surface">
@@ -325,10 +322,12 @@ export default function Home() {
       <section className="bg-primary py-12 md:py-20">
         <div className="max-w-[1200px] mx-auto px-5 md:px-16">
           <div className="grid md:grid-cols-[auto_1fr] gap-10 items-center">
-            <div className="w-48 h-48 md:w-56 md:h-56 rounded-full bg-secondary-container mx-auto md:mx-0 flex items-center justify-center shrink-0">
-              <span className="material-symbols-outlined text-[56px] text-primary">
-                person
-              </span>
+            <div className="w-48 h-48 md:w-56 md:h-56 rounded-full mx-auto md:mx-0 shrink-0 overflow-hidden border-4 border-on-primary/20">
+              <img
+                src="/dr-shruthi.jpg"
+                alt="Dr. Shruthi Desai, Rheumatologist and founder of Reconnect Wellness"
+                className="w-full h-full object-cover object-top"
+              />
             </div>
             <div className="flex flex-col gap-4 text-center md:text-left">
               <p className="text-label-md text-on-primary/60 uppercase tracking-wider">
@@ -382,6 +381,7 @@ export default function Home() {
                 quote:
                   "I was told I needed a knee replacement. After 12 weeks with Reconnect, my pain dropped from 8 to 3. I am walking 5 km daily now.",
                 metric: "Pain reduced by 60%",
+                image: "/testimonial-rajesh.jpg",
               },
               {
                 name: "Meera, 42",
@@ -389,6 +389,7 @@ export default function Home() {
                 quote:
                   "I spent years avoiding movement because of my back. The team helped me build strength around the problem. I have not had a flare-up in 4 months.",
                 metric: "Zero flare-ups in 4 months",
+                image: "/testimonial-meera.jpg",
               },
               {
                 name: "Amit, 65",
@@ -396,6 +397,7 @@ export default function Home() {
                 quote:
                   "My DEXA scan improved for the first time in years. The combination of strength training and nutrition made a visible difference.",
                 metric: "DEXA score improved",
+                image: "/testimonial-amit.jpg",
               },
             ].map((t) => (
               <div
@@ -422,10 +424,12 @@ export default function Home() {
                   </p>
                 </div>
                 <div className="flex items-center gap-3 pt-2 border-t border-hairline">
-                  <div className="w-10 h-10 rounded-full bg-surface-container-high flex items-center justify-center">
-                    <span className="material-symbols-outlined text-on-surface-variant text-[20px]">
-                      person
-                    </span>
+                  <div className="w-10 h-10 rounded-full overflow-hidden shrink-0">
+                    <img
+                      src={t.image}
+                      alt={t.name}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
                   <div>
                     <p className="text-label-md text-on-surface">{t.name}</p>

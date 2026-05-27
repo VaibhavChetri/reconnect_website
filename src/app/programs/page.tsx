@@ -17,6 +17,8 @@ const tracks = [
     icon: "shield",
     variants: ["Age 30 - 40", "Age 40 - 50", "Age 50 - 60", "Age 60+"],
     color: "bg-primary",
+    image: "/yoga-stretching.jpg",
+    imageAlt: "Woman performing a yoga stretch as part of a proactive joint health program",
   },
   {
     slug: "manage",
@@ -32,6 +34,8 @@ const tracks = [
       "Inflammatory Joint Disease (RA)",
     ],
     color: "bg-accent-amber",
+    image: "/trainer-guided-exercise.jpg",
+    imageAlt: "Trainer guiding a patient through a resistance band exercise for pain management",
   },
   {
     slug: "recover",
@@ -42,6 +46,8 @@ const tracks = [
     icon: "sprint",
     variants: ["Ligament / ACL Rehab", "Post-Op Rehabilitation"],
     color: "bg-secondary",
+    image: "/knee-examination.jpg",
+    imageAlt: "Close-up of a knee examination during a rehabilitation assessment",
   },
 ];
 
@@ -77,11 +83,12 @@ export default function ProgramsPage() {
                 href={`/programs/${track.slug}`}
                 className="group bg-surface-container-lowest rounded-xl hairline-border soft-shadow p-6 flex flex-col transition-all duration-200 hover:-translate-y-1 soft-shadow-hover"
               >
-                {/* Image placeholder */}
-                <div className="bg-surface-container-high rounded-lg w-full aspect-[4/3] flex items-center justify-center mb-6">
-                  <span className="material-symbols-outlined text-5xl text-on-surface-variant/40">
-                    {track.icon}
-                  </span>
+                <div className="rounded-lg w-full aspect-[4/3] overflow-hidden mb-6">
+                  <img
+                    src={track.image}
+                    alt={track.imageAlt}
+                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
+                  />
                 </div>
 
                 {/* Badge */}

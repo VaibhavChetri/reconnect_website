@@ -1,0 +1,255 @@
+@import "tailwindcss";
+
+@theme inline {
+  /* === Colors === */
+  --color-surface: #fbf9f4;
+  --color-surface-dim: #dbdad5;
+  --color-surface-bright: #fbf9f4;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f5f3ee;
+  --color-surface-container: #f0eee9;
+  --color-surface-container-high: #eae8e3;
+  --color-surface-container-highest: #e4e2dd;
+  --color-on-surface: #1b1c19;
+  --color-on-surface-variant: #3e4947;
+  --color-surface-variant: #e4e2dd;
+
+  --color-primary: #00544c;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #0e6e64;
+  --color-on-primary-container: #9cede0;
+  --color-primary-fixed: #a0f1e4;
+  --color-primary-fixed-dim: #84d5c8;
+
+  --color-secondary: #346760;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #b5eae1;
+  --color-on-secondary-container: #386b64;
+  --color-secondary-fixed: #b8ede4;
+
+  --color-tertiary: #6e3f00;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #8f5400;
+  --color-on-tertiary-container: #ffd7b2;
+  --color-tertiary-fixed: #ffdcbd;
+  --color-tertiary-fixed-dim: #ffb86e;
+
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+
+  --color-outline: #6e7977;
+  --color-outline-variant: #bec9c6;
+  --color-inverse-surface: #30312e;
+  --color-inverse-on-surface: #f2f1ec;
+  --color-inverse-primary: #84d5c8;
+  --color-surface-tint: #046a60;
+  --color-background: #fbf9f4;
+  --color-on-background: #1b1c19;
+
+  /* Accent */
+  --color-accent-amber: #F0A24B;
+  --color-success: #5B8C5A;
+  --color-hairline: #E6E1D6;
+
+  /* === Typography === */
+  --font-display: "Fraunces", serif;
+  --font-body: "Inter", sans-serif;
+
+  /* === Border Radius === */
+  --radius-card: 12px;
+  --radius-button: 12px;
+  --radius-section: 24px;
+
+  /* === Spacing === */
+  --spacing-unit: 8px;
+  --spacing-stack-sm: 12px;
+  --spacing-stack-md: 24px;
+  --spacing-stack-lg: 48px;
+  --spacing-gutter: 24px;
+  --spacing-margin-mobile: 20px;
+  --spacing-margin-desktop: 64px;
+  --spacing-container-max: 1200px;
+}
+
+/* === Base Styles === */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--color-surface);
+  color: var(--color-on-surface);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* === Utility Classes === */
+.soft-shadow {
+  box-shadow: 0px 4px 20px rgba(8, 67, 61, 0.04);
+}
+
+.soft-shadow-hover:hover {
+  box-shadow: 0px 12px 30px rgba(8, 67, 61, 0.08);
+}
+
+.hairline-border {
+  border: 1px solid var(--color-hairline);
+}
+
+.btn-primary {
+  background-color: var(--color-primary-container);
+  color: var(--color-on-primary);
+  border-bottom: 2px solid var(--color-primary);
+  border-radius: var(--radius-button);
+  padding: 12px 24px;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.01em;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-primary:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+.btn-primary:active {
+  transform: translateY(1px);
+}
+
+.btn-amber {
+  background-color: var(--color-accent-amber);
+  color: var(--color-on-surface);
+  border-bottom: 2px solid #d98b36;
+  border-radius: var(--radius-button);
+  padding: 12px 24px;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-amber:hover {
+  opacity: 0.9;
+  transform: translateY(-1px);
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
+  border-radius: var(--radius-button);
+  padding: 12px 24px;
+  font-weight: 600;
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.01em;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.btn-secondary:hover {
+  background-color: rgba(14, 110, 100, 0.05);
+}
+
+/* Glass card */
+.glass-card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--color-hairline);
+  box-shadow: 0px 4px 20px rgba(8, 67, 61, 0.04);
+}
+
+/* Progress bar */
+.progress-bar {
+  background-color: var(--color-tertiary-fixed-dim);
+  height: 8px;
+  border-radius: 9999px;
+  transition: width 0.3s ease;
+}
+
+/* Typography classes */
+.text-display-lg {
+  font-family: var(--font-display);
+  font-size: 48px;
+  line-height: 56px;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+}
+.text-display-lg-mobile {
+  font-family: var(--font-display);
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 700;
+}
+.text-headline-md {
+  font-family: var(--font-display);
+  font-size: 32px;
+  line-height: 40px;
+  font-weight: 600;
+}
+.text-headline-md-mobile {
+  font-family: var(--font-display);
+  font-size: 24px;
+  line-height: 32px;
+  font-weight: 600;
+}
+.text-title-lg {
+  font-family: var(--font-body);
+  font-size: 20px;
+  line-height: 28px;
+  font-weight: 600;
+}
+.text-body-lg {
+  font-family: var(--font-body);
+  font-size: 18px;
+  line-height: 28px;
+  font-weight: 400;
+}
+.text-body-md {
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 24px;
+  font-weight: 400;
+}
+.text-label-md {
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 20px;
+  letter-spacing: 0.01em;
+  font-weight: 500;
+}
+.text-caption {
+  font-family: var(--font-body);
+  font-size: 12px;
+  line-height: 16px;
+  font-weight: 400;
+}
+
+/* Material Symbols */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+}

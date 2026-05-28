@@ -1,80 +1,254 @@
+"use client";
+
+import { useState, type FormEvent } from "react";
 import Link from "next/link";
+import Button from "@/components/Button";
+import { SkeletonSvg } from "@/components/AnatomicalArt";
 
-const footerLinks = [
-  { href: "/programs", label: "Programs" },
-  { href: "/how-it-works", label: "How It Works" },
-  { href: "/about", label: "About" },
-  { href: "/pricing", label: "Pricing" },
-  { href: "/testimonials", label: "Success Stories" },
-  { href: "/contact", label: "Contact" },
-];
+/* ── Data ──────────────────────────────────────────────────── */
 
-const legalLinks = [
-  { href: "/faq", label: "FAQ" },
-  { href: "#", label: "Privacy Policy" },
-  { href: "#", label: "Terms of Service" },
-  { href: "#", label: "Accessibility" },
-];
+const columns = [
+  {
+    heading: "Programs",
+    links: [
+      { href: "/programs/prevent", label: "Prevent" },
+      { href: "/programs/manage", label: "Manage" },
+      { href: "/programs/recover", label: "Recover" },
+      { href: "/cgm", label: "CGM" },
+    ],
+  },
+  {
+    heading: "Company",
+    links: [
+      { href: "/how-it-works", label: "How It Works" },
+      { href: "/about", label: "About" },
+      { href: "/pricing", label: "Pricing" },
+    ],
+  },
+  {
+    heading: "Support",
+    links: [
+      { href: "/faq", label: "FAQ" },
+      { href: "/contact", label: "Contact" },
+      { href: "/assessment", label: "Assessment" },
+    ],
+  },
+  {
+    heading: "Legal",
+    links: [
+      { href: "#", label: "Privacy Policy" },
+      { href: "#", label: "Terms" },
+      { href: "#", label: "Accessibility" },
+    ],
+  },
+] as const;
+
+/* ── Social icons ──────────────────────────────────────────── */
+
+function InstagramIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <rect x="2" y="2" width="20" height="20" rx="5" />
+      <circle cx="12" cy="12" r="5" />
+      <circle cx="17.5" cy="6.5" r="1" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+function LinkedInIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="1.5"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-4 0v7h-4v-7a6 6 0 0 1 6-6z" />
+      <rect x="2" y="9" width="4" height="12" />
+      <circle cx="4" cy="4" r="2" />
+    </svg>
+  );
+}
+
+function CheckIcon({ className }: { className?: string }) {
+  return (
+    <svg
+      viewBox="0 0 24 24"
+      fill="none"
+      stroke="currentColor"
+      strokeWidth="2"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      className={className}
+      aria-hidden="true"
+    >
+      <polyline points="20 6 9 17 4 12" />
+    </svg>
+  );
+}
+
+/* ── Component ─────────────────────────────────────────────── */
 
 export default function Footer() {
+  const [email, setEmail] = useState("");
+  const [subscribed, setSubscribed] = useState(false);
+
+  const handleSubscribe = (e: FormEvent) => {
+    e.preventDefault();
+    if (!email.trim()) return;
+    // In production this would call an API
+    setSubscribed(true);
+  };
+
   return (
-    <footer className="bg-primary text-on-primary mt-auto">
-      <div className="max-w-[1200px] mx-auto px-5 md:px-16 py-12 md:py-16">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 md:gap-8 mb-10">
-          {/* Brand */}
-          <div className="md:col-span-2">
-            <span className="font-[var(--font-display)] text-2xl font-bold block mb-4">
-              Reconnect
-            </span>
-            <p className="text-on-primary/80 text-body-md max-w-sm">
-              A rheumatologist-led, personalized strength and nutrition program for joint pain,
-              arthritis, and bone health. Designed to work alongside your medication, not instead of it.
+    <footer className="relative overflow-hidden mt-auto">
+      {/* ═══ A) CTA Band ═══════════════════════════════════════ */}
+      <section className="bg-sage text-bone py-20 md:py-28">
+        <div className="container-site text-center max-w-3xl mx-auto flex flex-col items-center gap-6">
+          <h2 className="text-h2 font-display text-bone">
+            Your joints deserve better than painkillers and&nbsp;rest.
+          </h2>
+          <p className="text-body-lg text-bone/70 max-w-2xl">
+            Take a 2-minute assessment and find out which programme is right for
+            your body.
+          </p>
+          <Button variant="clay" href="/assessment" size="lg" arrow>
+            Start free assessment
+          </Button>
+        </div>
+      </section>
+
+      {/* ═══ B) Main Footer ════════════════════════════════════ */}
+      <section className="relative bg-sage-deep text-bone">
+        <div className="container-site py-16 md:py-20">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-10 md:gap-8">
+            {/* Brand column */}
+            <div className="sm:col-span-2 lg:col-span-1">
+              <Link href="/" className="flex items-center gap-2.5 mb-4" aria-label="Reconnect home">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/brand/logo-white.png" alt="" aria-hidden="true" className="h-10 w-10 object-contain" />
+                <span
+                  className="text-[1.2rem] font-semibold tracking-[0.04em] text-bone leading-none"
+                  style={{ fontFamily: "var(--font-brand)" }}
+                >
+                  RECONNECT
+                </span>
+              </Link>
+              <p className="text-body-sm text-bone/60 max-w-xs">
+                Rheumatologist-led strength training that works alongside your
+                medication, not instead of&nbsp;it.
+              </p>
+            </div>
+
+            {/* Link columns */}
+            {columns.map((col) => (
+              <div key={col.heading}>
+                <h3 className="text-eyebrow text-bone/40 mb-4">
+                  {col.heading}
+                </h3>
+                <ul className="flex flex-col gap-3">
+                  {col.links.map((link) => (
+                    <li key={link.label}>
+                      <Link
+                        href={link.href}
+                        className="text-body-sm text-bone/60 hover:text-bone transition-colors duration-200"
+                      >
+                        {link.label}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* ═══ C) Newsletter Row ═══════════════════════════════ */}
+        <div className="border-t border-bone/10">
+          <div className="container-site py-8 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <p className="serif-italic text-body text-bone/80">
+              Insights that move you forward&nbsp;&mdash;&nbsp;no&nbsp;noise.
+            </p>
+
+            {subscribed ? (
+              <div className="flex items-center gap-2 text-bone/80">
+                <CheckIcon className="w-5 h-5 text-clay" />
+                <span className="text-body-sm font-medium">
+                  You&apos;re in.
+                </span>
+              </div>
+            ) : (
+              <form
+                onSubmit={handleSubscribe}
+                className="flex flex-col sm:flex-row gap-3 w-full md:w-auto"
+              >
+                <input
+                  type="email"
+                  required
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Your email"
+                  className="bg-bone/10 border border-bone/20 text-bone placeholder:text-bone/30 rounded-pill px-5 py-3 text-body-sm outline-none focus:border-bone/40 transition-colors duration-200 w-full sm:w-64"
+                />
+                <Button variant="clay" type="submit" size="md">
+                  Subscribe
+                </Button>
+              </form>
+            )}
+          </div>
+        </div>
+
+        {/* ═══ D) Bottom Bar ═══════════════════════════════════ */}
+        <div className="border-t border-bone/10">
+          <div className="container-site py-6 flex flex-col md:flex-row items-center justify-between gap-4">
+            <p className="text-caption text-bone/40">
+              Designed by Dr.&nbsp;Shruthi Desai, Rheumatologist.
+            </p>
+
+            {/* Social icons */}
+            <div className="flex items-center gap-4">
+              <a
+                href="https://instagram.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="Instagram"
+                className="text-bone/40 hover:text-bone transition-colors duration-200"
+              >
+                <InstagramIcon className="w-5 h-5" />
+              </a>
+              <a
+                href="https://linkedin.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                aria-label="LinkedIn"
+                className="text-bone/40 hover:text-bone transition-colors duration-200"
+              >
+                <LinkedInIcon className="w-5 h-5" />
+              </a>
+            </div>
+
+            <p className="text-caption text-bone/40">
+              &copy; 2026 Reconnect Wellness
             </p>
           </div>
-
-          {/* Quick Links */}
-          <div>
-            <h4 className="text-label-md font-semibold mb-4 text-on-primary/90">Quick Links</h4>
-            <nav className="flex flex-col gap-3">
-              {footerLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className="text-on-primary/70 hover:text-on-primary transition-colors text-body-md"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-          </div>
-
-          {/* Legal */}
-          <div>
-            <h4 className="text-label-md font-semibold mb-4 text-on-primary/90">Legal</h4>
-            <nav className="flex flex-col gap-3">
-              {legalLinks.map((link) => (
-                <Link
-                  key={link.label}
-                  href={link.href}
-                  className="text-on-primary/70 hover:text-on-primary transition-colors text-body-md"
-                >
-                  {link.label}
-                </Link>
-              ))}
-            </nav>
-          </div>
         </div>
 
-        {/* Bottom bar */}
-        <div className="border-t border-on-primary/20 pt-6 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-caption text-on-primary/60">
-            &copy; {new Date().getFullYear()} Reconnect Wellness. Designed for restorative health.
-          </p>
-          <p className="text-caption text-on-primary/60">
-            Designed by Dr. Shruthi Desai, Rheumatologist.
-          </p>
-        </div>
-      </div>
+        {/* ═══ E) Skeleton Watermark ═══════════════════════════ */}
+        <SkeletonSvg className="absolute bottom-0 right-0 w-[400px] opacity-[0.03] text-bone pointer-events-none" />
+      </section>
     </footer>
   );
 }

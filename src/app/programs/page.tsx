@@ -1,196 +1,568 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import Section from "@/components/Section";
+import SectionHeader from "@/components/SectionHeader";
+import Eyebrow from "@/components/Eyebrow";
+import Reveal from "@/components/Reveal";
+import Stagger from "@/components/Stagger";
+import Button from "@/components/Button";
+import Card from "@/components/Card";
+import Pill from "@/components/Pill";
+import CTASection from "@/components/CTASection";
+import JourneyStepper from "@/components/JourneyStepper";
+import {
+  KneeSvg,
+  SpineSvg,
+  HandSvg,
+  HipSvg,
+  SkeletonSvg,
+} from "@/components/AnatomicalArt";
+import BodyRegionDiagram from "./_components/BodyRegionDiagram";
 
 export const metadata: Metadata = {
   title: "Programs",
   description:
-    "Explore Reconnect's doctor-designed strength programs for joint health, arthritis management, bone density, and post-injury recovery. Choose Prevent, Manage, or Recover.",
+    "Three condition-focused tracks — Prevent, Manage, Recover — each built around a personalised medical assessment. Doctor-led strength training for joints, spine, and bones.",
 };
+
+/* ── Data ──────────────────────────────────────────────────── */
 
 const tracks = [
   {
     slug: "prevent",
+    eyebrow: "Track 01",
     title: "Prevent",
-    tagline: "Keep your joints strong as you age",
+    headline: "Stay ahead of the joints and bones you’ll need at 70.",
     description:
-      "Proactive strength and mobility training designed by a rheumatologist to protect your joints, build bone density, and keep you moving with confidence for decades to come.",
-    icon: "shield",
-    variants: ["Age 30 - 40", "Age 40 - 50", "Age 50 - 60", "Age 60+"],
-    color: "bg-primary",
-    image: "/yoga-stretching.jpg",
-    imageAlt: "Woman performing a yoga stretch as part of a proactive joint health program",
+      "For early signs, family history, or age-related risk. Build strength and bone density before problems start.",
+    tags: ["Early arthritis", "Bone health", "40+"],
+    image: "/kettlebell-squat.jpg",
+    imageAlt: "TODO: replace with Dr. Shruthi's consented client image — proactive strength session.",
+    icon: SkeletonSvg,
   },
   {
     slug: "manage",
+    eyebrow: "Track 02",
     title: "Manage",
-    tagline: "Relieve pain and regain mobility",
+    headline: "Work around the pain. Then work it down.",
     description:
-      "Targeted exercise protocols that work alongside your treatment to reduce pain, strengthen the muscles around affected joints, and restore daily function.",
-    icon: "healing",
-    variants: [
-      "Arthritis (OA)",
-      "Spine & Disc Issues",
-      "Osteoporosis",
-      "Inflammatory Joint Disease (RA)",
-    ],
-    color: "bg-accent-amber",
-    image: "/trainer-guided-exercise.jpg",
-    imageAlt: "Trainer guiding a patient through a resistance band exercise for pain management",
+      "For those living with arthritis, joint pain, or disc issues. Reduce flare-ups and build resilience.",
+    tags: ["Active arthritis", "Joint pain", "Back pain"],
+    image: "/mat-stretching.jpg",
+    imageAlt: "TODO: replace with consented in-clinic photo for the Manage track.",
+    icon: SpineSvg,
   },
   {
     slug: "recover",
+    eyebrow: "Track 03",
     title: "Recover",
-    tagline: "Safe return to activity after injury or surgery",
+    headline: "Rebuild from surgery or severe wear — safely, with oversight.",
     description:
-      "Structured rehabilitation programs that guide you from post-op or post-injury back to full strength, with clear milestones and medical oversight every step of the way.",
-    icon: "sprint",
-    variants: ["Ligament / ACL Rehab", "Post-Op Rehabilitation"],
-    color: "bg-secondary",
-    image: "/knee-examination.jpg",
-    imageAlt: "Close-up of a knee examination during a rehabilitation assessment",
+      "For post-surgery or severe degeneration. Rebuild strength safely under close medical guidance.",
+    tags: ["Post-surgery", "Severe OA", "Rehab"],
+    image: "/trainer-guided-exercise.jpg",
+    imageAlt: "TODO: replace with consented rehabilitation photo for the Recover track.",
+    icon: KneeSvg,
   },
-];
+] as const;
+
+const conditionGroups = [
+  {
+    title: "Joints & Arthritis",
+    icon: HandSvg,
+    items: [
+      { name: "Knee osteoarthritis", track: "/programs/manage" },
+      { name: "Rheumatoid arthritis", track: "/programs/manage" },
+      { name: "Joint pain & stiffness", track: "/programs/manage" },
+      { name: "Frozen shoulder", track: "/programs/manage" },
+      { name: "Hip pain", track: "/programs/manage" },
+    ],
+  },
+  {
+    title: "Spine & Back",
+    icon: SpineSvg,
+    items: [
+      { name: "Chronic back pain", track: "/programs/manage" },
+      { name: "Disc bulge / herniation", track: "/programs/recover" },
+      { name: "Sciatica", track: "/programs/manage" },
+      { name: "Cervical (neck) pain", track: "/programs/manage" },
+      { name: "Posture-related pain", track: "/programs/prevent" },
+    ],
+  },
+  {
+    title: "Bone Health",
+    icon: SkeletonSvg,
+    items: [
+      { name: "Osteoporosis", track: "/programs/recover" },
+      { name: "Osteopenia", track: "/programs/manage" },
+      { name: "Post-menopausal bone loss", track: "/programs/prevent" },
+      { name: "Fracture-risk strength building", track: "/programs/prevent" },
+    ],
+  },
+  {
+    title: "Recovery & Rehab",
+    icon: HipSvg,
+    items: [
+      { name: "Post-surgical strength rebuild", track: "/programs/recover" },
+      { name: "Severe osteoarthritis support", track: "/programs/recover" },
+      { name: "Deconditioning / sarcopenia", track: "/programs/manage" },
+    ],
+  },
+] as const;
+
+const comparison = {
+  headers: ["", "Prevent", "Manage", "Recover"],
+  rows: [
+    {
+      label: "Who it’s for",
+      cells: [
+        "Adults 40+, early signs, family history",
+        "Living with arthritis, joint or back pain",
+        "Post-surgery, severe degeneration",
+      ],
+    },
+    {
+      label: "Intensity",
+      cells: ["Moderate, progressive", "Low-to-moderate, pain-respecting", "Low, milestone-gated"],
+    },
+    {
+      label: "Typical conditions",
+      cells: [
+        "Osteopenia, early OA, posture loss",
+        "Knee/back OA, disc bulge, RA",
+        "Post-replacement, severe OA, fracture recovery",
+      ],
+    },
+    {
+      label: "Primary goal",
+      cells: [
+        "Build bone density and protect joints early",
+        "Calm pain, then rebuild around it",
+        "Restore safe range, strength, and confidence",
+      ],
+    },
+  ],
+} as const;
+
+const differentiators = [
+  {
+    title: "Designed for your body",
+    body: "Programs are built from your medical assessment — not your height, weight, or a generic template.",
+  },
+  {
+    title: "Pain-first, not pain-through",
+    body: "We work around pain, respect it, reduce it — then build strength on top of a quieter joint.",
+  },
+  {
+    title: "Doctor-led, not influencer-led",
+    body: "Every program is designed by a rheumatologist. We work alongside your existing medical care.",
+  },
+] as const;
+
+/* ── Page ──────────────────────────────────────────────────── */
 
 export default function ProgramsPage() {
   return (
     <>
-      {/* ── Hero ── */}
-      <section className="bg-primary py-16 md:py-24">
-        <div className="max-w-[1200px] mx-auto px-5 md:px-16 text-center">
-          <p className="text-label-md text-primary-fixed-dim mb-4 uppercase tracking-widest font-[var(--font-body)]">
-            Our Programs
-          </p>
-          <h1 className="text-display-lg-mobile md:text-display-lg text-on-primary font-[var(--font-display)] mb-6">
-            Programs designed around your body
-            <br className="hidden md:block" />
-            &nbsp;&mdash; not a template.
-          </h1>
-          <p className="text-body-lg text-primary-fixed-dim max-w-2xl mx-auto font-[var(--font-body)]">
-            Every Reconnect program is built on clinical evidence and
-            personalised to your age, condition, and goals. Choose the track
-            that fits where you are today.
-          </p>
-        </div>
-      </section>
+      {/* ═══════════════════════════════════════════════════════
+          1) HERO — full-bleed bone with x-ray glow + watermark
+          ═══════════════════════════════════════════════════════ */}
+      <section className="relative overflow-hidden bg-bone pt-36 md:pt-44 pb-24 md:pb-32">
+        <SkeletonSvg className="watermark text-ink right-[-120px] top-[60px] w-[520px] hidden md:block" />
 
-      {/* ── Program Track Cards ── */}
-      <section className="py-12 md:py-20">
-        <div className="max-w-[1200px] mx-auto px-5 md:px-16">
-          <div className="grid gap-8 md:grid-cols-3">
-            {tracks.map((track) => (
-              <Link
-                key={track.slug}
-                href={`/programs/${track.slug}`}
-                className="group bg-surface-container-lowest rounded-xl hairline-border soft-shadow p-6 flex flex-col transition-all duration-200 hover:-translate-y-1 soft-shadow-hover"
-              >
-                <div className="rounded-lg w-full aspect-[4/3] overflow-hidden mb-6">
-                  <img
-                    src={track.image}
-                    alt={track.imageAlt}
-                    className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-105"
-                  />
-                </div>
+        <div className="container-site relative">
+          <div className="xray-glow max-w-4xl">
+            <Reveal>
+              <Eyebrow>Programs</Eyebrow>
+            </Reveal>
 
-                {/* Badge */}
-                <span
-                  className={`inline-flex self-start text-caption font-semibold uppercase tracking-wider text-on-primary px-3 py-1 rounded-full mb-3 ${track.color}`}
-                >
-                  {track.title}
-                </span>
+            <Reveal delay={0.1}>
+              <h1 className="text-hero text-ink mt-6">
+                One method.{" "}
+                <span className="serif-italic text-clay">Three starting points.</span>
+              </h1>
+            </Reveal>
 
-                <h2 className="text-title-lg text-on-surface font-[var(--font-body)] mb-2">
-                  {track.tagline}
-                </h2>
+            <Reveal delay={0.2}>
+              <p className="text-body-lg text-ink-soft mt-8 max-w-2xl">
+                Every member begins with a medical assessment. From there, every track runs the
+                same connected journey — Assessment → Exercise → Nutrition → Psychology — tuned
+                to your exact condition, age, and severity.
+              </p>
+            </Reveal>
 
-                <p className="text-body-md text-on-surface-variant font-[var(--font-body)] mb-5 flex-grow">
-                  {track.description}
-                </p>
-
-                {/* Condition / variant chips */}
-                <div className="flex flex-wrap gap-2 mb-5">
-                  {track.variants.map((v) => (
-                    <span
-                      key={v}
-                      className="text-caption text-on-surface-variant bg-surface-container-high px-3 py-1 rounded-full"
-                    >
-                      {v}
-                    </span>
-                  ))}
-                </div>
-
-                {/* Link indicator */}
-                <span className="text-label-md text-primary font-semibold inline-flex items-center gap-1 group-hover:gap-2 transition-all">
-                  Explore {track.title} track
-                  <span className="material-symbols-outlined text-[18px]">
-                    arrow_forward
-                  </span>
-                </span>
-              </Link>
-            ))}
+            <Reveal delay={0.3}>
+              <div className="mt-10 flex flex-wrap items-center gap-4">
+                <Button variant="clay" size="lg" href="/assessment" arrow>
+                  Take free assessment
+                </Button>
+                <Button variant="ghost" size="lg" href="#three-tracks">
+                  See the tracks
+                </Button>
+              </div>
+            </Reveal>
           </div>
         </div>
       </section>
 
-      {/* ── How It Works Summary ── */}
-      <section className="bg-surface-container py-12 md:py-20">
-        <div className="max-w-[1200px] mx-auto px-5 md:px-16 text-center">
-          <h2 className="text-headline-md-mobile md:text-headline-md text-on-surface font-[var(--font-display)] mb-4">
-            Not sure which track is right for you?
-          </h2>
-          <p className="text-body-lg text-on-surface-variant font-[var(--font-body)] max-w-xl mx-auto mb-8">
-            Take our free 2-minute assessment. We&apos;ll recommend the right
-            program, intensity level, and starting point based on your answers.
-          </p>
-          <Link href="/assessment" className="btn-amber">
-            Take the free assessment
-            <span className="material-symbols-outlined text-[18px]">
-              arrow_forward
-            </span>
-          </Link>
+      {/* ═══════════════════════════════════════════════════════
+          2) DIFFERENTIATOR — quick restatement
+          ═══════════════════════════════════════════════════════ */}
+      <Section bg="bg-bone-deep">
+        <Stagger className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+          {differentiators.map((d, i) => (
+            <div key={d.title} className="flex flex-col gap-3">
+              <span className="text-eyebrow text-clay">0{i + 1}</span>
+              <h3 className="text-h3 font-display text-ink">{d.title}</h3>
+              <p className="text-body text-ink-soft">{d.body}</p>
+            </div>
+          ))}
+        </Stagger>
+      </Section>
+
+      {/* ═══════════════════════════════════════════════════════
+          3) THE THREE TRACKS — alternating split rows
+          ═══════════════════════════════════════════════════════ */}
+      <section id="three-tracks" className="section-py bg-bone">
+        <div className="container-site mb-16 md:mb-24">
+          <SectionHeader
+            eyebrowNumber="(01)"
+            eyebrow="The Tracks"
+            title="Choose your starting point. We’ll do the rest."
+            description="Three condition-focused tracks. Each one is personalised after your assessment — no template, no guesswork."
+            align="left"
+          />
+        </div>
+
+        <div className="container-site flex flex-col gap-24 md:gap-32">
+          {tracks.map((track, i) => {
+            const Icon = track.icon;
+            const reverse = i % 2 === 1;
+            return (
+              <Reveal key={track.slug}>
+                <article
+                  className={`grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center ${
+                    reverse ? "lg:[&>*:first-child]:order-2" : ""
+                  }`}
+                >
+                  {/* Media */}
+                  <div className="lg:col-span-7 relative">
+                    <div className="xray-glow">
+                      <div className="relative rounded-[20px] overflow-hidden shadow-soft">
+                        {/* TODO: swap for Dr. Shruthi's consented patient/clinic photography */}
+                        <img
+                          src={track.image}
+                          alt={track.imageAlt}
+                          loading="lazy"
+                          className="w-full h-[360px] md:h-[460px] object-cover"
+                        />
+                        <Icon
+                          className={`absolute ${
+                            reverse ? "left-6" : "right-6"
+                          } top-6 w-20 text-bone/40 pointer-events-none`}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Copy */}
+                  <div className="lg:col-span-5 flex flex-col gap-5">
+                    <Eyebrow>{track.eyebrow}</Eyebrow>
+                    <h3 className="text-h2 font-display text-ink">{track.title}</h3>
+                    <p className="serif-italic text-h4 text-ink-soft">{track.headline}</p>
+                    <p className="text-body text-ink-soft">{track.description}</p>
+
+                    <div className="flex flex-wrap gap-2 mt-1">
+                      {track.tags.map((tag) => (
+                        <Pill key={tag} variant="sage">
+                          {tag}
+                        </Pill>
+                      ))}
+                    </div>
+
+                    <div className="mt-4">
+                      <Button
+                        variant="sage-outline"
+                        size="md"
+                        href={`/programs/${track.slug}`}
+                        arrow
+                      >
+                        Explore {track.title}
+                      </Button>
+                    </div>
+                  </div>
+                </article>
+              </Reveal>
+            );
+          })}
         </div>
       </section>
 
-      {/* ── Trust Band ── */}
-      <section className="py-12 md:py-16">
-        <div className="max-w-[1200px] mx-auto px-5 md:px-16">
-          <div className="grid gap-6 md:grid-cols-3">
-            {[
-              {
-                icon: "stethoscope",
-                title: "Doctor-designed",
-                text: "Every program is built by a practising rheumatologist with 10+ years of clinical experience.",
-              },
-              {
-                icon: "tune",
-                title: "Personalised to you",
-                text: "Your age, condition, pain level, and fitness history shape every exercise selection.",
-              },
-              {
-                icon: "verified",
-                title: "Evidence-based",
-                text: "Protocols grounded in peer-reviewed research on strength training for musculoskeletal health.",
-              },
-            ].map((item) => (
-              <div
-                key={item.title}
-                className="flex items-start gap-4 p-5 rounded-xl"
-              >
-                <span className="material-symbols-outlined text-primary text-[28px] mt-0.5">
-                  {item.icon}
-                </span>
+      {/* ═══════════════════════════════════════════════════════
+          4) CONDITIONS WE TREAT — categorized columns
+          ═══════════════════════════════════════════════════════ */}
+      <Section bg="bg-bone-deep" id="conditions">
+        <SectionHeader
+          eyebrowNumber="(02)"
+          eyebrow="Conditions we treat"
+          title="Built for the conditions you actually live with."
+          description="Find what you’re dealing with — every item links to the track designed for it."
+          align="left"
+          className="mb-14 md:mb-20"
+        />
+
+        <Stagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {conditionGroups.map((group) => {
+            const Icon = group.icon;
+            return (
+              <Card key={group.title} padding="md" className="flex flex-col gap-5 bg-calcium h-full">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-h4 font-display text-ink">{group.title}</h3>
+                  <Icon className="w-10 text-sage opacity-60" />
+                </div>
+                <div className="hairline-b" />
+                <ul className="flex flex-col gap-3">
+                  {group.items.map((item) => (
+                    <li key={item.name}>
+                      <Link
+                        href={item.track}
+                        className="group flex items-center justify-between gap-3 text-body-sm text-ink-soft hover:text-ink transition-colors duration-200"
+                      >
+                        <span>{item.name}</span>
+                        <span className="text-clay opacity-0 group-hover:opacity-100 transition-opacity duration-200">→</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </Card>
+            );
+          })}
+        </Stagger>
+      </Section>
+
+      {/* ═══════════════════════════════════════════════════════
+          5) HOW EVERY PROGRAM IS BUILT — journey + body diagram
+          ═══════════════════════════════════════════════════════ */}
+      <Section bg="bg-bone">
+        <SectionHeader
+          eyebrowNumber="(03)"
+          eyebrow="The method"
+          title="How every program is built."
+          description="The same four-step journey runs under every track. The assessment always comes first — nothing is generic, nothing is skipped."
+          align="left"
+          className="mb-14 md:mb-20"
+        />
+
+        <JourneyStepper className="mb-20" />
+
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 md:gap-16 items-start">
+          {/* Body region diagram */}
+          <Card padding="lg" className="bg-calcium">
+            <Eyebrow>Where does it hurt?</Eyebrow>
+            <h3 className="text-h3 font-display text-ink mt-4 mb-6">
+              Exercise starts where the problem is.
+            </h3>
+            <BodyRegionDiagram />
+          </Card>
+
+          {/* Method copy — exercise split, nutrition, psychology */}
+          <div className="flex flex-col gap-8">
+            <Reveal>
+              <div className="flex gap-5">
+                <span className="text-eyebrow text-clay shrink-0 pt-1">01</span>
                 <div>
-                  <h3 className="text-title-lg text-on-surface font-[var(--font-body)] mb-1">
-                    {item.title}
-                  </h3>
-                  <p className="text-body-md text-on-surface-variant font-[var(--font-body)]">
-                    {item.text}
+                  <h4 className="text-h4 font-display text-ink mb-2">Medical assessment first.</h4>
+                  <p className="text-body text-ink-soft">
+                    Every program begins with a rheumatologist-led intake — history, imaging, current
+                    medication, pain map. Nothing else starts until this is done.
                   </p>
                 </div>
               </div>
-            ))}
+            </Reveal>
+
+            <Reveal delay={0.05}>
+              <div className="flex gap-5">
+                <span className="text-eyebrow text-clay shrink-0 pt-1">02</span>
+                <div>
+                  <h4 className="text-h4 font-display text-ink mb-2">Exercise, split by region.</h4>
+                  <p className="text-body text-ink-soft">
+                    Upper body, lower body, back, and the specific joints we’re protecting — sequenced
+                    so we start where the problem is, and scaled for your age and severity.
+                  </p>
+                </div>
+              </div>
+            </Reveal>
+
+            <Reveal delay={0.1}>
+              <div className="flex gap-5">
+                <span className="text-eyebrow text-clay shrink-0 pt-1">03</span>
+                <div>
+                  <h4 className="text-h4 font-display text-ink mb-2">Nutrition, built to your plate.</h4>
+                  <p className="text-body text-ink-soft">
+                    A short veg / non-veg pre-questionnaire shapes a plan that fits how you actually eat —
+                    anti-inflammatory, protein-led, and realistic.
+                  </p>
+                </div>
+              </div>
+            </Reveal>
+
+            <Reveal delay={0.15}>
+              <div className="flex gap-5">
+                <span className="text-eyebrow text-clay shrink-0 pt-1">04</span>
+                <div>
+                  <h4 className="text-h4 font-display text-ink mb-2">
+                    Psychology — only when needed.
+                  </h4>
+                  <p className="text-body text-ink-soft">
+                    Pain has a mental load. If we detect a block — fear of movement, low adherence,
+                    burnout — we refer in a clinical psychologist. Never reflexive, always considered.
+                  </p>
+                </div>
+              </div>
+            </Reveal>
+
+            <div className="pt-2">
+              <Button variant="sage-outline" href="/how-it-works" arrow>
+                See the full method
+              </Button>
+            </div>
           </div>
         </div>
-      </section>
+      </Section>
+
+      {/* ═══════════════════════════════════════════════════════
+          6) SELF-SELECT COMPARISON TABLE
+          ═══════════════════════════════════════════════════════ */}
+      <Section bg="bg-bone-deep">
+        <SectionHeader
+          eyebrowNumber="(04)"
+          eyebrow="Compare tracks"
+          title="Still not sure which one is you?"
+          description="A quick side-by-side. The assessment confirms it — this is just orientation."
+          align="left"
+          className="mb-12"
+        />
+
+        <Reveal>
+          <div className="bg-calcium rounded-[20px] overflow-hidden shadow-card hairline">
+            {/* Desktop table */}
+            <div className="hidden md:block overflow-x-auto">
+              <table className="w-full text-left">
+                <thead>
+                  <tr className="border-b border-line">
+                    {comparison.headers.map((h, i) => (
+                      <th
+                        key={h || i}
+                        className={`p-5 lg:p-7 text-eyebrow text-ink-soft ${
+                          i === 0 ? "w-[22%]" : ""
+                        }`}
+                      >
+                        {h}
+                      </th>
+                    ))}
+                  </tr>
+                </thead>
+                <tbody>
+                  {comparison.rows.map((row, ri) => (
+                    <tr
+                      key={row.label}
+                      className={ri !== comparison.rows.length - 1 ? "border-b border-line" : ""}
+                    >
+                      <td className="p-5 lg:p-7 align-top text-body-sm font-medium text-ink">
+                        {row.label}
+                      </td>
+                      {row.cells.map((cell, ci) => (
+                        <td
+                          key={ci}
+                          className="p-5 lg:p-7 align-top text-body-sm text-ink-soft"
+                        >
+                          {cell}
+                        </td>
+                      ))}
+                    </tr>
+                  ))}
+                  <tr className="border-t border-line bg-bone/40">
+                    <td className="p-5 lg:p-7"></td>
+                    {tracks.map((t) => (
+                      <td key={t.slug} className="p-5 lg:p-7">
+                        <Button
+                          variant="sage-outline"
+                          size="md"
+                          href={`/programs/${t.slug}`}
+                          arrow
+                        >
+                          Explore {t.title}
+                        </Button>
+                      </td>
+                    ))}
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile stack */}
+            <div className="md:hidden flex flex-col divide-y divide-line">
+              {tracks.map((t, ti) => (
+                <div key={t.slug} className="p-6 flex flex-col gap-4">
+                  <h4 className="text-h4 font-display text-ink">{t.title}</h4>
+                  {comparison.rows.map((row) => (
+                    <div key={row.label}>
+                      <p className="text-eyebrow text-ink-soft mb-1">{row.label}</p>
+                      <p className="text-body-sm text-ink">{row.cells[ti]}</p>
+                    </div>
+                  ))}
+                  <div className="pt-2">
+                    <Button variant="sage-outline" size="md" href={`/programs/${t.slug}`} arrow>
+                      Explore {t.title}
+                    </Button>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </Reveal>
+      </Section>
+
+      {/* ═══════════════════════════════════════════════════════
+          7) CGM ADD-ON — slim, subordinate
+          ═══════════════════════════════════════════════════════ */}
+      <Section bg="bg-bone">
+        <Reveal>
+          <div className="bg-sage-tint rounded-[20px] p-8 md:p-10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+            <div className="flex items-start gap-5 max-w-2xl">
+              <span className="hidden sm:inline-flex shrink-0 w-12 h-12 rounded-full bg-sage text-bone items-center justify-center text-body-sm font-medium">
+                +
+              </span>
+              <div>
+                <p className="text-eyebrow text-sage mb-2">Add-on</p>
+                <h3 className="text-h4 font-display text-ink mb-1">
+                  Continuous Glucose Monitoring
+                </h3>
+                <p className="text-body-sm text-ink-soft">
+                  Managing borderline sugar? Pair any track with our CGM program — blood-sugar patterns
+                  drive systemic inflammation that hits joints and bone. ₹15,000 for 6 months.
+                </p>
+              </div>
+            </div>
+            <Button variant="sage-outline" href="/cgm" arrow>
+              Learn about CGM
+            </Button>
+          </div>
+        </Reveal>
+      </Section>
+
+      {/* ═══════════════════════════════════════════════════════
+          8) FINAL CTA
+          ═══════════════════════════════════════════════════════ */}
+      <CTASection
+        headline="The right track starts with the right assessment."
+        description="Two minutes. A handful of questions. We’ll point you at the program your body actually needs."
+        primaryHref="/assessment"
+        primaryLabel="Take free assessment"
+        secondaryHref="/contact"
+        secondaryLabel="Book consultation"
+        variant="sage"
+      />
     </>
   );
 }

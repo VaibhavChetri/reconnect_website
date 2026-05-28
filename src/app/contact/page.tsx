@@ -1,138 +1,165 @@
 import type { Metadata } from "next";
-import Link from "next/link";
-import ContactForm from "./ContactForm";
+import Reveal from "@/components/Reveal";
+import Eyebrow from "@/components/Eyebrow";
+import { SkeletonSvg } from "@/components/AnatomicalArt";
+import ContactForm from "./_components/ContactForm";
 
 export const metadata: Metadata = {
   title: "Contact",
   description:
-    "Get in touch with Reconnect Wellness. Book a consultation with Dr. Shruthi Desai or ask us anything about our doctor-led strength training programs.",
+    "Get in touch with Dr. Shruthi's team. Book a consultation, ask about a program, or message us — a real person replies within a working day.",
 };
 
-const contactDetails = [
+type Way = {
+  label: string;
+  body: string;
+  actionLabel: string;
+  href: string;
+  primary?: boolean;
+};
+
+const ways: Way[] = [
   {
-    icon: "location_on",
-    label: "Clinic Address",
-    value: "Reconnect Wellness Clinic\nIndiranagar, Bengaluru 560038\nKarnataka, India",
+    label: "Book a consultation",
+    body: "A 20-minute call with Dr. Shruthi’s team to talk through your situation. The fastest way to know if Reconnect is right for you.",
+    actionLabel: "Open booking →",
+    href: "#contact-form",
+    primary: true,
   },
   {
-    icon: "call",
-    label: "Phone",
-    value: "+91 98765 43210",
-    href: "tel:+919876543210",
-  },
-  {
-    icon: "mail",
     label: "Email",
-    value: "hello@reconnectwellness.in",
+    body: "hello@reconnectwellness.in",
+    actionLabel: "hello@reconnectwellness.in",
     href: "mailto:hello@reconnectwellness.in",
   },
+  {
+    label: "WhatsApp / phone",
+    body: "Quickest for short questions — usually answered within a few working hours.",
+    actionLabel: "+91 ⟪TODO⟫",
+    href: "tel:+91",
+  },
+  {
+    label: "Instagram",
+    body: "Behind-the-scenes from the clinic and patient stories (with consent).",
+    actionLabel: "@reconnectwellness",
+    href: "https://instagram.com",
+  },
+  {
+    label: "LinkedIn",
+    body: "Connect with Dr. Shruthi professionally.",
+    actionLabel: "Dr. Shruthi Desai",
+    href: "https://linkedin.com",
+  },
 ];
+
+const reassurances = [
+  "Reconnect is non-surgical — surgical cases are referred to orthopaedics.",
+  "We work alongside your existing medication and treating doctor, never instead of them.",
+  "Every program is designed by a rheumatologist; no prescriptions are modified by us.",
+] as const;
 
 export default function ContactPage() {
   return (
     <>
-      {/* Hero */}
-      <section className="bg-primary text-on-primary py-16 md:py-24">
-        <div className="max-w-[1200px] mx-auto px-5 md:px-16 text-center">
-          <p className="text-label-md text-on-primary/70 uppercase tracking-widest mb-4">
-            Contact
-          </p>
-          <h1 className="text-display-lg-mobile md:text-display-lg text-on-primary max-w-3xl mx-auto mb-6">
-            Let&apos;s talk about your journey to recovery.
-          </h1>
-          <p className="text-body-lg text-on-primary/80 max-w-2xl mx-auto">
-            Whether you have a question about our programs, want to discuss your
-            condition, or are ready to book a consultation — we are here to help.
-          </p>
-        </div>
-      </section>
+      {/* ═══════════════════════════════════════════════════════
+          INTRO
+          ═══════════════════════════════════════════════════════ */}
+      <section className="relative overflow-hidden bg-bone pt-32 md:pt-40 pb-12 md:pb-16">
+        <SkeletonSvg className="watermark text-ink right-[-120px] top-[40px] w-[480px] hidden md:block" />
 
-      {/* Contact Content */}
-      <section className="py-12 md:py-20">
-        <div className="max-w-[1200px] mx-auto px-5 md:px-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-12 md:gap-16">
-            {/* Left: Contact Info */}
-            <div>
-              <h2 className="text-headline-md-mobile md:text-headline-md text-on-surface mb-6">
-                Reach us directly
-              </h2>
-              <p className="text-body-lg text-on-surface-variant mb-8">
-                We respond to all enquiries within 24 hours on working days. For
-                urgent medical concerns, please contact your treating physician
-                directly.
+        <div className="container-site relative">
+          <div className="max-w-3xl">
+            <Reveal>
+              <Eyebrow>Contact</Eyebrow>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <h1 className="text-hero text-ink mt-6">
+                Talk to a{" "}
+                <span className="serif-italic text-clay">real human.</span>
+              </h1>
+            </Reveal>
+            <Reveal delay={0.2}>
+              <p className="text-body-lg text-ink-soft mt-6 max-w-2xl">
+                Whatever you need — a quick question, a booking, or context on a complicated
+                case — there&rsquo;s a real person on the other end. Replies typically arrive
+                within a working day.
               </p>
-
-              <div className="flex flex-col gap-6">
-                {contactDetails.map((detail) => (
-                  <div key={detail.label} className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-full bg-secondary-container flex items-center justify-center shrink-0">
-                      <span className="material-symbols-outlined text-primary text-xl">
-                        {detail.icon}
-                      </span>
-                    </div>
-                    <div>
-                      <p className="text-label-md text-on-surface-variant mb-1">
-                        {detail.label}
-                      </p>
-                      {detail.href ? (
-                        <a
-                          href={detail.href}
-                          className="text-body-md text-primary hover:underline"
-                        >
-                          {detail.value}
-                        </a>
-                      ) : (
-                        <p className="text-body-md text-on-surface whitespace-pre-line">
-                          {detail.value}
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Map placeholder */}
-              <div className="mt-8 bg-surface-container-high rounded-xl aspect-[16/9] flex items-center justify-center">
-                <p className="text-body-md text-on-surface-variant text-center p-4">
-                  Embedded map showing clinic location in Indiranagar, Bengaluru
-                </p>
-              </div>
-            </div>
-
-            {/* Right: Form */}
-            <div>
-              <h2 className="text-headline-md-mobile md:text-headline-md text-on-surface mb-6">
-                Book a consultation
-              </h2>
-              <ContactForm />
-            </div>
+            </Reveal>
           </div>
         </div>
       </section>
 
-      {/* Before you book nudge */}
-      <section className="bg-surface-container-low py-12 md:py-16">
-        <div className="max-w-[1200px] mx-auto px-5 md:px-16">
-          <div className="bg-surface-container-lowest rounded-xl hairline-border soft-shadow p-8 flex flex-col md:flex-row items-center gap-6 md:gap-10">
-            <div className="w-14 h-14 rounded-full bg-accent-amber/20 flex items-center justify-center shrink-0">
-              <span className="material-symbols-outlined text-accent-amber text-3xl">
-                lightbulb
-              </span>
+      {/* ═══════════════════════════════════════════════════════
+          SPLIT: ways to reach us · form
+          ═══════════════════════════════════════════════════════ */}
+      <section className="bg-bone pb-32 md:pb-40">
+        <div className="container-site">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+            {/* ── LEFT: warm copy + contact methods + reassurance ── */}
+            <div className="lg:col-span-5 lg:sticky lg:top-32">
+              <Reveal>
+                <h2 className="text-h2 font-display text-ink">
+                  Five ways to reach&nbsp;us.
+                </h2>
+                <p className="text-body text-ink-soft mt-4 max-w-md">
+                  Pick whichever fits the moment. The form on the right is the easiest if
+                  you&rsquo;ve got a few minutes to share context.
+                </p>
+              </Reveal>
+
+              <div className="mt-10 flex flex-col">
+                {ways.map((w, i) => (
+                  <a
+                    key={w.label}
+                    href={w.href}
+                    target={w.href.startsWith("http") ? "_blank" : undefined}
+                    rel={w.href.startsWith("http") ? "noopener noreferrer" : undefined}
+                    className={`group flex items-start justify-between gap-6 py-5 ${
+                      i !== ways.length - 1 ? "border-b border-line" : ""
+                    }`}
+                  >
+                    <div className="flex-1">
+                      <p className={`text-eyebrow ${w.primary ? "text-clay" : "text-ink-soft"}`}>
+                        {w.label}
+                      </p>
+                      <p className="text-body text-ink mt-2">{w.body}</p>
+                    </div>
+                    <span className="text-body-sm font-medium text-clay shrink-0 mt-1 opacity-70 group-hover:opacity-100 transition-opacity duration-200 whitespace-nowrap">
+                      {w.actionLabel}
+                    </span>
+                  </a>
+                ))}
+              </div>
+
+              {/* Reassurance block */}
+              <Reveal delay={0.15}>
+                <div className="mt-10 bg-sage-tint rounded-[18px] p-6">
+                  <p className="text-eyebrow text-sage mb-4">Before you write</p>
+                  <ul className="flex flex-col gap-3">
+                    {reassurances.map((r) => (
+                      <li key={r} className="flex items-start gap-3 text-body-sm text-ink">
+                        <svg
+                          width="16" height="16" viewBox="0 0 20 20" fill="none"
+                          stroke="currentColor" strokeWidth="1.75" strokeLinecap="round" strokeLinejoin="round"
+                          className="shrink-0 text-sage mt-1"
+                          aria-hidden="true"
+                        >
+                          <path d="M4 10l4 4 8-8" />
+                        </svg>
+                        <span>{r}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </Reveal>
             </div>
-            <div className="flex-grow text-center md:text-left">
-              <h3 className="text-title-lg text-on-surface mb-2">
-                Before you book
-              </h3>
-              <p className="text-body-md text-on-surface-variant">
-                Not sure if Reconnect is right for your condition? Our free
-                assessment takes 3 minutes and gives you a clear picture of where
-                you stand — no commitment, no pressure. It helps us (and you)
-                understand your needs before a consultation.
-              </p>
+
+            {/* ── RIGHT: form ────────────────────────────────────── */}
+            <div className="lg:col-span-7" id="contact-form">
+              <Reveal delay={0.1}>
+                <ContactForm />
+              </Reveal>
             </div>
-            <Link href="/assessment" className="btn-amber shrink-0">
-              Take the free assessment
-            </Link>
           </div>
         </div>
       </section>

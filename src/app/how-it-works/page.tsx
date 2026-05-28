@@ -1,184 +1,323 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import Section from "@/components/Section";
+import SectionHeader from "@/components/SectionHeader";
+import Eyebrow from "@/components/Eyebrow";
+import Reveal from "@/components/Reveal";
+import Stagger from "@/components/Stagger";
+import Button from "@/components/Button";
+import Card from "@/components/Card";
+import CTASection from "@/components/CTASection";
+import { SkeletonSvg, SpineSvg } from "@/components/AnatomicalArt";
+import StickyJourneySequence from "./_components/StickyJourneySequence";
 
 export const metadata: Metadata = {
   title: "How It Works",
   description:
-    "A science-backed, 4-step roadmap to pain-free movement. Medical assessment, strength training, nutrition, and mindset coaching — all designed by a rheumatologist.",
+    "A doctor-led, personalised process. Assessment first, then a program built around your exact condition — exercise, nutrition, and psychology integrated into one journey.",
 };
 
-const steps = [
+/* ── Data ──────────────────────────────────────────────────── */
+
+const differentRecap = [
   {
-    number: "01",
-    icon: "clinical_notes",
-    title: "Your Clinical Foundation",
-    description:
-      "Every journey starts with understanding your body. Dr. Shruthi conducts a thorough medical assessment — not a generic intake form, but a real clinical evaluation that considers your diagnosis, imaging, medication, pain levels, and lifestyle.",
-    checklist: [
-      "Detailed condition report based on your diagnosis",
-      "Joint mobility and baseline strength assessment",
-      "Safety protocol tailored to your medications",
-      "Clear exercise readiness evaluation",
-    ],
-    image: "/knee-examination.jpg",
-    imageAlt: "Clinical knee examination as part of a thorough medical assessment",
+    badge: "01",
+    title: "Doctor-led",
+    body: "Designed and overseen by a rheumatologist. Trainers carry out the program — the medicine sits behind it.",
   },
   {
-    number: "02",
-    icon: "fitness_center",
-    title: "Your Movement Prescription",
-    description:
-      "Based on your clinical assessment, you receive a week-by-week strength training plan built for your specific condition. Not random exercises from the internet — a progressive, graded loading program that respects your pain thresholds and builds real strength.",
-    checklist: [
-      "Week-by-week structured strength program",
-      "Video demonstrations for every movement",
-      "Progressive loading that adapts to your pace",
-      "Form feedback and movement corrections",
-    ],
-    image: "/trainer-guided-exercise.jpg",
-    imageAlt: "Trainer guiding a patient through a resistance band exercise with proper form",
+    badge: "02",
+    title: "Personalised",
+    body: "Built from your assessment — not a template, not your height and weight.",
   },
   {
-    number: "03",
-    icon: "restaurant",
-    title: "Fueling Joint Recovery",
-    description:
-      "What you eat directly impacts inflammation, bone density, and recovery. You get a nutrition plan rooted in anti-inflammatory science — adapted to Indian meals, your dietary preferences, and your specific condition.",
-    checklist: [
-      "Anti-inflammatory nutrition framework",
-      "Personalized macro and calorie targets",
-      "Indian meal plans you will actually follow",
-      "Supplement guidance reviewed by your doctor",
-    ],
-    image: "/woman-dumbbell-side.jpg",
-    imageAlt: "Woman performing a dumbbell curl as part of a strength and recovery program",
+    badge: "03",
+    title: "Pain-first",
+    body: "We calm the pain, respect it, then build strength around it. Never push through it.",
   },
   {
-    number: "04",
-    icon: "psychology",
-    title: "The Mindset for Movement",
-    description:
-      "Fear of pain keeps people immobile. Our coaching addresses the psychology behind chronic pain — helping you overcome kinesiophobia, build consistency, and trust your body again through mindfulness and behavioral strategies.",
-    checklist: [
-      "Overcoming the fear of movement (kinesiophobia)",
-      "Mindfulness techniques for pain management",
-      "One-on-one behavior change coaching",
-      "Building lasting habits that stick",
-    ],
-    image: "/mat-stretching.jpg",
-    imageAlt: "Woman performing a gentle seated stretch on a mat, practising mindful movement",
+    badge: "04",
+    title: "Structured roadmap",
+    body: "A 12-week cycle with measurable checkpoints. The direction and motivation YouTube can’t give you.",
   },
-];
+] as const;
+
+const expectation = [
+  {
+    when: "Week 1",
+    title: "Assessment & baseline",
+    body: "Medical intake done. Pain mapped. A program built for your body — not a generic template.",
+  },
+  {
+    when: "Weeks 4–6",
+    title: "Pain quietening",
+    body: "Supporting muscles starting to switch back on. Most members notice the first meaningful drop in daily pain.",
+  },
+  {
+    when: "Month 2",
+    title: "Muscles activating — start loading",
+    body: "Now the body can take load. Standing strength, real-life patterns, full-body work that protects the joint.",
+  },
+  {
+    when: "Month 3",
+    title: "Resilience & routine",
+    body: "Higher capacity, fewer flare-ups, a routine you can carry on your own. Medical reassessment to confirm.",
+  },
+] as const;
 
 export default function HowItWorksPage() {
   return (
     <>
-      {/* Hero */}
-      <section className="bg-primary text-on-primary py-16 md:py-24">
-        <div className="max-w-[1200px] mx-auto px-5 md:px-16 text-center">
-          <p className="text-label-md text-on-primary/70 uppercase tracking-widest mb-4">
-            How It Works
-          </p>
-          <h1 className="text-display-lg-mobile md:text-display-lg text-on-primary max-w-3xl mx-auto mb-6">
-            A science-backed roadmap to pain-free movement.
-          </h1>
-          <p className="text-body-lg text-on-primary/80 max-w-2xl mx-auto">
-            Four pillars. One integrated program. Designed by a rheumatologist who
-            believes strength training is the most underused prescription in
-            medicine.
-          </p>
-        </div>
-      </section>
+      {/* ═══════════════════════════════════════════════════════
+          1) HERO
+          ═══════════════════════════════════════════════════════ */}
+      <section className="relative overflow-hidden bg-bone pt-36 md:pt-44 pb-24 md:pb-32">
+        <SkeletonSvg className="watermark text-ink right-[-120px] top-[60px] w-[520px] hidden md:block" />
 
-      {/* Steps */}
-      <section className="py-12 md:py-20">
-        <div className="max-w-[1200px] mx-auto px-5 md:px-16">
-          {/* Vertical connector line (desktop) */}
-          <div className="flex flex-col gap-20 md:gap-28 relative">
-            {steps.map((step, idx) => {
-              const isReversed = idx % 2 !== 0;
-              return (
-                <div
-                  key={step.number}
-                  className={`flex flex-col ${
-                    isReversed ? "md:flex-row-reverse" : "md:flex-row"
-                  } gap-10 md:gap-16 items-center`}
-                >
-                  {/* Image placeholder */}
-                  <div className="w-full md:w-1/2">
-                    <div className="rounded-2xl aspect-[4/3] overflow-hidden">
-                      <img
-                        src={step.image}
-                        alt={step.imageAlt}
-                        className="w-full h-full object-cover"
-                      />
-                    </div>
-                  </div>
-
-                  {/* Content */}
-                  <div className="w-full md:w-1/2">
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="w-12 h-12 rounded-full bg-primary-container text-on-primary flex items-center justify-center text-title-lg font-bold shrink-0">
-                        {step.number}
-                      </div>
-                      <span className="material-symbols-outlined text-primary text-3xl">
-                        {step.icon}
-                      </span>
-                    </div>
-
-                    <h2 className="text-headline-md-mobile md:text-headline-md text-on-surface mb-4">
-                      {step.title}
-                    </h2>
-                    <p className="text-body-lg text-on-surface-variant mb-6">
-                      {step.description}
-                    </p>
-
-                    {/* Checklist card */}
-                    <div className="bg-surface-container-lowest rounded-xl hairline-border soft-shadow p-6">
-                      <h3 className="text-label-md text-primary uppercase tracking-wider mb-4">
-                        What you get
-                      </h3>
-                      <ul className="flex flex-col gap-3">
-                        {step.checklist.map((item) => (
-                          <li key={item} className="flex items-start gap-3">
-                            <span className="material-symbols-outlined text-success text-xl mt-0.5 shrink-0">
-                              check_circle
-                            </span>
-                            <span className="text-body-md text-on-surface">
-                              {item}
-                            </span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  </div>
-                </div>
-              );
-            })}
+        <div className="container-site relative">
+          <div className="xray-glow max-w-4xl">
+            <Reveal>
+              <Eyebrow>How it works</Eyebrow>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <h1 className="text-hero text-ink mt-6">
+                A doctor-led process,{" "}
+                <span className="serif-italic text-clay">built around you.</span>
+              </h1>
+            </Reveal>
+            <Reveal delay={0.2}>
+              <p className="text-body-lg text-ink-soft mt-8 max-w-2xl">
+                Assessment first. Then a program shaped around your exact condition,
+                history, and life — exercise, nutrition, and psychology integrated into
+                one connected journey. Care is patient-to-patient. Nothing is generic.
+              </p>
+            </Reveal>
+            <Reveal delay={0.3}>
+              <div className="mt-10 flex flex-wrap items-center gap-4">
+                <Button variant="clay" size="lg" href="/assessment" arrow>
+                  Take free assessment
+                </Button>
+                <Button variant="ghost" size="lg" href="#the-journey">
+                  See the four steps
+                </Button>
+              </div>
+            </Reveal>
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="bg-secondary-container py-12 md:py-20">
-        <div className="max-w-[1200px] mx-auto px-5 md:px-16 text-center">
-          <h2 className="text-headline-md-mobile md:text-headline-md text-on-surface mb-4">
-            Ready to start your roadmap?
-          </h2>
-          <p className="text-body-lg text-on-surface-variant max-w-xl mx-auto mb-8">
-            It begins with a 3-minute assessment. No commitments, no spam — just
-            a clear picture of where you stand and what is possible.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/assessment" className="btn-amber">
-              Take the free assessment
-            </Link>
-            <Link href="/contact" className="btn-secondary">
-              Book a consultation
-            </Link>
-          </div>
+      {/* ═══════════════════════════════════════════════════════
+          2) BIG NUMBERED STICKY-SCROLL SEQUENCE
+          ═══════════════════════════════════════════════════════ */}
+      <Section bg="bg-bone-deep" id="the-journey">
+        <SectionHeader
+          eyebrowNumber="(01)"
+          eyebrow="The connected journey"
+          title="One method. Four pillars. Always in this order."
+          description="The pillars are integrated, not bolted on. Each one informs the next — and the assessment governs all of them."
+          align="left"
+          className="mb-16 md:mb-20"
+        />
+
+        <StickyJourneySequence />
+      </Section>
+
+      {/* ═══════════════════════════════════════════════════════
+          3) "WHY NOT JUST YOUTUBE?" CALLOUT
+          ═══════════════════════════════════════════════════════ */}
+      <section className="relative bg-bone section-py overflow-hidden">
+        <SpineSvg className="watermark text-ink left-[-100px] top-[40px] w-[420px] hidden md:block" />
+
+        <div className="container-site relative">
+          <Reveal>
+            <div className="max-w-3xl">
+              <Eyebrow number="(02)">A fair question</Eyebrow>
+              <h2 className="text-h2 font-display text-ink mt-6 leading-tight">
+                <span className="serif-italic">“Why not just</span>{" "}
+                <span className="serif-italic text-clay">YouTube?”</span>
+              </h2>
+
+              <blockquote className="text-h4 font-display text-ink-soft mt-10 border-l-2 border-clay pl-6 max-w-2xl">
+                YouTube has endless exercises — but no motivation, and no direction for
+                where <em className="serif-italic text-ink">your</em> body is at. We give
+                you the roadmap.
+              </blockquote>
+              <p className="text-caption text-ink-soft mt-4 pl-6">
+                — Dr. Shruthi Desai, Rheumatologist
+              </p>
+
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mt-12">
+                {[
+                  {
+                    label: "Endless videos",
+                    body: "Plenty of exercises. Zero idea which ones apply to your knee, your spine, or your age.",
+                  },
+                  {
+                    label: "No accountability",
+                    body: "Nobody’s watching. Adherence drops within weeks. Pain doesn’t.",
+                  },
+                  {
+                    label: "No roadmap",
+                    body: "Random workouts don’t add up to a 12-week plan with milestones and medical oversight.",
+                  },
+                ].map((item, i) => (
+                  <div key={item.label} className="flex flex-col gap-2">
+                    <span className="text-eyebrow text-ink-soft">0{i + 1}</span>
+                    <p className="text-body font-medium text-ink">{item.label}</p>
+                    <p className="text-body-sm text-ink-soft">{item.body}</p>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </Reveal>
         </div>
       </section>
+
+      {/* ═══════════════════════════════════════════════════════
+          4) RECONNECT vs GENERIC APPS COMPARISON
+          ═══════════════════════════════════════════════════════ */}
+      <Section bg="bg-bone-deep">
+        <SectionHeader
+          eyebrowNumber="(03)"
+          eyebrow="A different starting point"
+          title="Reconnect vs generic fitness apps."
+          description="The difference isn’t in the workouts. It’s in what comes before them."
+          align="left"
+          className="mb-12"
+        />
+
+        <Reveal>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* Generic apps card */}
+            <div className="bg-calcium rounded-[20px] p-8 md:p-10 hairline flex flex-col gap-6 h-full">
+              <div className="flex items-baseline justify-between">
+                <h3 className="text-h3 font-display text-ink-soft">
+                  Generic fitness apps
+                </h3>
+                <span className="text-caption text-ink-soft uppercase tracking-widest">
+                  e.g. HealthifyMe, Fitternity
+                </span>
+              </div>
+              <div className="hairline-b" />
+              <ul className="flex flex-col gap-4">
+                {[
+                  "Inputs: height + weight + a few preferences",
+                  "Output: one generic template per goal",
+                  "Same workout served to thousands of bodies",
+                  "No medical intake; no condition awareness",
+                  "Pain? You’re on your own to modify",
+                ].map((line) => (
+                  <li key={line} className="flex items-start gap-3 text-body text-ink-soft">
+                    <span className="mt-2 inline-block w-1.5 h-1.5 rounded-full bg-ink-soft/40 shrink-0" />
+                    {line}
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            {/* Reconnect card */}
+            <div className="bg-sage-deep text-bone rounded-[20px] p-8 md:p-10 flex flex-col gap-6 h-full relative overflow-hidden">
+              <div className="absolute -top-10 -right-10 w-48 h-48 rounded-full pointer-events-none"
+                   style={{ background: "radial-gradient(50% 50% at 50% 50%, rgba(0,100,224,0.18), transparent 70%)" }}
+                   aria-hidden="true" />
+
+              <div className="flex items-baseline justify-between relative">
+                <h3 className="text-h3 font-display text-bone">Reconnect</h3>
+                <span className="text-caption text-clay-soft uppercase tracking-widest">
+                  Rheumatologist-led
+                </span>
+              </div>
+              <div className="border-b border-bone/15 relative" />
+              <ul className="flex flex-col gap-4 relative">
+                {[
+                  "Inputs: medical history, imaging, medications, pain map",
+                  "Output: a program built for your exact condition",
+                  "Region-split: upper / lower / back / target joint",
+                  "Age- and severity-scaled prescriptions",
+                  "Pain-first: we calm, respect, and build around it",
+                ].map((line) => (
+                  <li key={line} className="flex items-start gap-3 text-body text-bone/85">
+                    <span className="mt-2 inline-block w-1.5 h-1.5 rounded-full bg-clay shrink-0" />
+                    {line}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+        </Reveal>
+      </Section>
+
+      {/* ═══════════════════════════════════════════════════════
+          5) WHAT MAKES US DIFFERENT — 4-card recap
+          ═══════════════════════════════════════════════════════ */}
+      <Section bg="bg-bone">
+        <SectionHeader
+          eyebrowNumber="(04)"
+          eyebrow="What makes us different"
+          title="Four ideas that sit under everything we do."
+          align="left"
+          className="mb-12"
+        />
+
+        <Stagger className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {differentRecap.map((d) => (
+            <Card key={d.title} padding="md" className="bg-calcium h-full flex flex-col gap-3">
+              <span className="text-eyebrow text-clay">{d.badge}</span>
+              <h4 className="text-h4 font-display text-ink">{d.title}</h4>
+              <p className="text-body-sm text-ink-soft">{d.body}</p>
+            </Card>
+          ))}
+        </Stagger>
+      </Section>
+
+      {/* ═══════════════════════════════════════════════════════
+          6) EXPECTATION TIMELINE — week 1, 4-6, month 2, month 3
+          ═══════════════════════════════════════════════════════ */}
+      <Section bg="bg-bone-deep">
+        <SectionHeader
+          eyebrowNumber="(05)"
+          eyebrow="What to expect"
+          title="The 12-week shape."
+          description="Measured language — trajectories, not promises. Outcomes always sit alongside, not instead of, your existing medical care."
+          align="left"
+          className="mb-16"
+        />
+
+        <Stagger className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6" staggerDelay={0.08}>
+          {expectation.map((e, i) => (
+            <div
+              key={e.when}
+              className="relative bg-calcium rounded-[18px] p-6 md:p-7 hairline flex flex-col gap-3 h-full"
+            >
+              <div className="flex items-center justify-between">
+                <span className="text-eyebrow text-clay">{e.when}</span>
+                <span className="text-h4 font-display text-line">0{i + 1}</span>
+              </div>
+              <div className="hairline-b" />
+              <h4 className="text-h4 font-display text-ink">{e.title}</h4>
+              <p className="text-body-sm text-ink-soft">{e.body}</p>
+            </div>
+          ))}
+        </Stagger>
+
+        <p className="text-caption text-ink-soft italic mt-8 max-w-2xl border-l border-line pl-5">
+          Reconnect is non-surgical. We coordinate with your treating doctor and never modify
+          prescriptions. Stories shared across the site are with explicit consent; outcomes
+          vary by individual.
+        </p>
+      </Section>
+
+      {/* ═══════════════════════════════════════════════════════
+          7) FINAL CTA
+          ═══════════════════════════════════════════════════════ */}
+      <CTASection
+        headline="The assessment is where the personalisation begins."
+        description="Two minutes. A handful of questions. We confirm the right track and shape the program around your body."
+        primaryHref="/assessment"
+        primaryLabel="Take free assessment"
+        secondaryHref="/contact"
+        secondaryLabel="Book consultation"
+        variant="sage"
+      />
     </>
   );
 }

@@ -1,159 +1,301 @@
-"use client";
-
-import { useState } from "react";
+import type { Metadata } from "next";
 import Link from "next/link";
+import Section from "@/components/Section";
+import Eyebrow from "@/components/Eyebrow";
+import Reveal from "@/components/Reveal";
+import Accordion from "@/components/Accordion";
+import CTASection from "@/components/CTASection";
+import { SkeletonSvg } from "@/components/AnatomicalArt";
+import FaqGroupNav from "./_components/FaqGroupNav";
 
-const faqs = [
+export const metadata: Metadata = {
+  title: "FAQ",
+  description:
+    "Common questions about Reconnect — how it differs from physio and fitness apps, safety with arthritis and medication, pricing, and what to expect.",
+};
+
+/* ── Data ──────────────────────────────────────────────────── */
+
+type FaqGroup = {
+  id: string;
+  label: string;
+  blurb: string;
+  items: { q: string; a: React.ReactNode }[];
+};
+
+const groups: FaqGroup[] = [
   {
-    question: "Will this replace my doctor or medication?",
-    answer:
-      "Not at all. Reconnect is designed to work alongside your existing medical treatment — not instead of it. Your program is created by a rheumatologist and takes your current medications, diagnosis, and treatment plan into account. We coordinate with your treating physician when needed.",
+    id: "about-the-program",
+    label: "About the program",
+    blurb: "What Reconnect is, what it isn’t, and how it compares to the alternatives.",
+    items: [
+      {
+        q: "How is this different from physiotherapy?",
+        a: (
+          <p>
+            Physiotherapy focuses on rehabilitation after an injury or surgery — typically
+            short-term and tied to a specific incident. Reconnect builds long-term,
+            progressive strength designed for chronic joint and bone conditions. We&rsquo;re
+            not a substitute for the physio you see after a fracture; we&rsquo;re the
+            ongoing program that protects the joint for the next 30 years.
+          </p>
+        ),
+      },
+      {
+        q: "How is this different from HealthifyMe, Fitternity, or a YouTube plan?",
+        a: (
+          <p>
+            Those give you one generic set of workouts based on height, weight, and a few
+            preferences. We start with a medical assessment by a rheumatologist and design a
+            program around your exact condition — split by body region (upper / lower /
+            back / target joint) and started exactly where your problem is. Same age, same
+            weight, different diagnosis — different program.
+          </p>
+        ),
+      },
+      {
+        q: "Do you do surgery?",
+        a: (
+          <p>
+            No. Dr. Shruthi is a rheumatologist; surgical cases are referred to orthopaedics.
+            Reconnect focuses on non-surgical strength and pain management, both for people
+            avoiding surgery and people recovering from one.
+          </p>
+        ),
+      },
+      {
+        q: "What is the CGM package?",
+        a: (
+          <p>
+            A separate 6-month metabolic add-on for borderline-diabetic and medication-avoidant
+            adults — a continuous glucose monitor with remote review and nutrition adjustments.{" "}
+            <Link
+              href="/cgm"
+              className="text-clay font-medium underline-offset-4 hover:underline"
+            >
+              See the CGM program →
+            </Link>
+          </p>
+        ),
+      },
+    ],
   },
   {
-    question: "How is this different from physiotherapy?",
-    answer:
-      "Physiotherapy typically focuses on short-term rehabilitation after injury or surgery. Reconnect is a structured, progressive strength training program designed for people with chronic musculoskeletal conditions. We build long-term strength, improve bone density, and reduce pain through graded loading — not just stretches and hot packs.",
+    id: "medical-and-safety",
+    label: "Medical & safety",
+    blurb: "How we work alongside your existing care — and where we draw the line.",
+    items: [
+      {
+        q: "Will this replace my doctor or medication?",
+        a: (
+          <p>
+            No. Reconnect works alongside your existing treatment. Programs are designed by a
+            rheumatologist to complement your care, not replace it. We do not modify
+            prescriptions; we coordinate with your treating doctor when needed. As pain and
+            function improve, your physician may choose to taper medication — that decision is
+            theirs.
+          </p>
+        ),
+      },
+      {
+        q: "I’ve never exercised, or I’m in significant pain right now. Is this for me?",
+        a: (
+          <p>
+            Yes — this is exactly who the program is built for. We calm the pain first with
+            the right measures, then start gently and progress gradually. If you&rsquo;ve never
+            picked up a dumbbell, we won&rsquo;t throw heavy numbers at you. The plan adapts
+            to your daily pain level, not the other way around.
+          </p>
+        ),
+      },
+      {
+        q: "Can I join if I’m already on arthritis medication?",
+        a: (
+          <p>
+            Yes. The medical assessment accounts for your current treatment, condition, and
+            any limitations your treating doctor has set. Many of our members are on long-term
+            anti-inflammatories or DMARDs — the program is built around that, not despite it.
+          </p>
+        ),
+      },
+      {
+        q: "Is it safe for severe arthritis, rheumatoid arthritis, or post-surgical recovery?",
+        a: (
+          <p>
+            Yes, with the right track and the right modifications. The{" "}
+            <Link
+              href="/programs/recover"
+              className="text-clay font-medium underline-offset-4 hover:underline"
+            >
+              Recover track
+            </Link>{" "}
+            specifically handles post-surgery and severe degeneration with milestone-gated
+            progression and close coordination with your treating surgeon or physician. We are
+            non-surgical ourselves; we follow your doctor&rsquo;s lead on restrictions.
+          </p>
+        ),
+      },
+    ],
   },
   {
-    question: "I'm on medication for arthritis — is this safe?",
-    answer:
-      "Yes. Every program begins with a medical assessment conducted by Dr. Shruthi Desai, a practising rheumatologist. She reviews your diagnosis, imaging, medications (including biologics, DMARDs, and steroids), and any contraindications before designing your plan. Safety is the starting point, not an afterthought.",
-  },
-  {
-    question: "I've never exercised before — can I still join?",
-    answer:
-      "Absolutely. Many of our members have never set foot in a gym. Your program starts at a level appropriate for your current strength and pain levels, then progresses gradually. Our coaches are trained to work with complete beginners who have medical conditions — this is not a bootcamp.",
-  },
-  {
-    question: "What conditions do you cover?",
-    answer:
-      "Reconnect programs are designed for osteoarthritis, rheumatoid arthritis, ankylosing spondylitis, disc bulges and chronic back pain, osteoporosis and osteopenia, frozen shoulder, post-joint-replacement recovery, and other musculoskeletal and autoimmune conditions. If you are unsure whether your condition is covered, take the free assessment or book a consultation.",
-  },
-  {
-    question: "How long before I see results?",
-    answer:
-      "Most members report noticeable improvement in pain and mobility within 4 to 8 weeks. Strength and bone density changes take longer — typically 3 to 6 months. The key is consistency with a well-designed program, which is exactly what we provide. We track your progress with regular check-ins so you can see the numbers move.",
-  },
-  {
-    question: "Can I do this from home?",
-    answer:
-      "Yes. Most of our programs are designed for home workouts with minimal equipment — resistance bands, light dumbbells, and your own bodyweight. Video demonstrations guide you through every movement. You do not need a gym membership to get started.",
-  },
-  {
-    question: "What if I have a flare-up during the program?",
-    answer:
-      "Flare-ups happen, and we plan for them. Your program includes flare-up protocols — modified routines that keep you moving safely without aggravating the inflammation. On the Care and Elite plans, Dr. Shruthi is available to adjust your protocol in real time. We never push through pain blindly.",
+    id: "logistics-and-pricing",
+    label: "Logistics & pricing",
+    blurb: "Plans, time commitment, equipment, and how membership works in practice.",
+    items: [
+      {
+        q: "How much does it cost? What plans are available?",
+        a: (
+          <p>
+            Three monthly plans: Essential (₹2,499/mo), Care (₹4,999/mo — most popular), and
+            Elite (₹8,999/mo). The CGM add-on is ₹15,000 for 6 months.{" "}
+            <Link
+              href="/pricing"
+              className="text-clay font-medium underline-offset-4 hover:underline"
+            >
+              See all plans →
+            </Link>
+          </p>
+        ),
+      },
+      {
+        q: "Do I need gym equipment to start?",
+        a: (
+          <p>
+            No. Most programs begin with bodyweight movement and resistance bands. As you
+            progress, light dumbbells help — but a full home gym is never required. Most
+            members train entirely at home.
+          </p>
+        ),
+      },
+      {
+        q: "How much time per week does the program take?",
+        a: (
+          <p>
+            Typically three sessions of around 45 minutes each, plus a short daily movement
+            habit. Designed to fit a working week — not to replace one.
+          </p>
+        ),
+      },
+      {
+        q: "Can I pause or cancel my plan?",
+        a: (
+          <p>
+            Yes — both. Pause for travel, surgery recovery, or any other reason; cancel any
+            time before your next billing cycle. No long-term contracts, no lock-ins.
+          </p>
+        ),
+      },
+    ],
   },
 ];
 
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "FAQPage",
-  mainEntity: faqs.map((faq) => ({
-    "@type": "Question",
-    name: faq.question,
-    acceptedAnswer: {
-      "@type": "Answer",
-      text: faq.answer,
-    },
-  })),
-};
+/* ── Page ──────────────────────────────────────────────────── */
+
+const navGroups = groups.map((g) => ({
+  id: g.id,
+  label: g.label,
+  count: g.items.length,
+}));
 
 export default function FAQPage() {
-  const [openIndex, setOpenIndex] = useState<number | null>(0);
-
-  const toggle = (index: number) => {
-    setOpenIndex(openIndex === index ? null : index);
-  };
-
   return (
     <>
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
+      {/* ═══════════════════════════════════════════════════════
+          HERO
+          ═══════════════════════════════════════════════════════ */}
+      <section className="relative overflow-hidden bg-bone pt-36 md:pt-44 pb-16 md:pb-24">
+        <SkeletonSvg className="watermark text-ink right-[-140px] top-[60px] w-[520px] hidden md:block" />
 
-      {/* Hero */}
-      <section className="bg-primary text-on-primary py-16 md:py-24">
-        <div className="max-w-[1200px] mx-auto px-5 md:px-16 text-center">
-          <p className="text-label-md text-on-primary/70 uppercase tracking-widest mb-4">
-            FAQ
-          </p>
-          <h1 className="text-display-lg-mobile md:text-display-lg text-on-primary max-w-3xl mx-auto mb-6">
-            Frequently Asked Questions
-          </h1>
-          <p className="text-body-lg text-on-primary/80 max-w-2xl mx-auto">
-            Honest answers to the things people ask before joining. If your
-            question is not here, get in touch — we are happy to talk.
-          </p>
+        <div className="container-site relative">
+          <div className="max-w-4xl">
+            <Reveal>
+              <Eyebrow>Frequently asked</Eyebrow>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <h1 className="text-hero text-ink mt-6">
+                Common questions,{" "}
+                <span className="serif-italic text-clay">honest answers.</span>
+              </h1>
+            </Reveal>
+            <Reveal delay={0.2}>
+              <p className="text-body-lg text-ink-soft mt-8 max-w-2xl">
+                If yours isn&rsquo;t here, write to us. Dr.&nbsp;Shruthi&rsquo;s team reads
+                every message and replies personally — usually within a working day.
+              </p>
+            </Reveal>
+          </div>
         </div>
       </section>
 
-      {/* FAQ Accordion */}
-      <section className="py-12 md:py-20">
-        <div className="max-w-[800px] mx-auto px-5 md:px-16">
-          <div className="flex flex-col gap-3">
-            {faqs.map((faq, index) => (
-              <div
-                key={index}
-                className="bg-surface-container-lowest rounded-xl hairline-border overflow-hidden transition-all duration-200"
-              >
-                <button
-                  onClick={() => toggle(index)}
-                  className="w-full flex items-center justify-between gap-4 px-6 py-5 text-left cursor-pointer"
-                  aria-expanded={openIndex === index}
+      {/* ═══════════════════════════════════════════════════════
+          GROUPED FAQ — sticky group nav + accordion groups
+          ═══════════════════════════════════════════════════════ */}
+      <Section bg="bg-bone">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
+          {/* Sticky group nav */}
+          <aside className="lg:col-span-3">
+            <div className="lg:sticky lg:top-32">
+              <FaqGroupNav groups={navGroups} />
+              <div className="hidden lg:block mt-10 pt-6 border-t border-line">
+                <p className="text-caption text-ink-soft mb-3">
+                  Still stuck?
+                </p>
+                <Link
+                  href="/contact"
+                  className="text-body-sm font-medium text-clay underline-offset-4 hover:underline"
                 >
-                  <span className="text-title-lg text-on-surface pr-4">
-                    {faq.question}
-                  </span>
-                  <span
-                    className="material-symbols-outlined text-on-surface-variant shrink-0 transition-transform duration-300"
-                    style={{
-                      transform:
-                        openIndex === index ? "rotate(180deg)" : "rotate(0deg)",
-                    }}
-                  >
-                    expand_more
-                  </span>
-                </button>
-                <div
-                  className="grid transition-all duration-300 ease-in-out"
-                  style={{
-                    gridTemplateRows: openIndex === index ? "1fr" : "0fr",
-                  }}
-                >
-                  <div className="overflow-hidden">
-                    <p className="text-body-md text-on-surface-variant px-6 pb-5 leading-relaxed">
-                      {faq.answer}
-                    </p>
-                  </div>
-                </div>
+                  Ask Dr.&nbsp;Shruthi directly →
+                </Link>
               </div>
+            </div>
+          </aside>
+
+          {/* FAQ groups */}
+          <div className="lg:col-span-9 flex flex-col gap-20 md:gap-24">
+            {groups.map((group, gi) => (
+              <section
+                key={group.id}
+                id={group.id}
+                aria-labelledby={`${group.id}-heading`}
+                className="scroll-mt-32"
+              >
+                <Reveal>
+                  <p className="text-eyebrow text-clay mb-3">
+                    ({String(gi + 1).padStart(2, "0")})
+                  </p>
+                  <h2
+                    id={`${group.id}-heading`}
+                    className="text-h2 font-display text-ink mb-3"
+                  >
+                    {group.label}
+                  </h2>
+                  <p className="text-body text-ink-soft mb-8 max-w-2xl">{group.blurb}</p>
+                </Reveal>
+
+                <Accordion
+                  items={group.items.map((i) => ({
+                    trigger: i.q,
+                    content: i.a,
+                  }))}
+                />
+              </section>
             ))}
           </div>
         </div>
-      </section>
+      </Section>
 
-      {/* CTA */}
-      <section className="bg-surface-container-low py-12 md:py-20">
-        <div className="max-w-[1200px] mx-auto px-5 md:px-16 text-center">
-          <h2 className="text-headline-md-mobile md:text-headline-md text-on-surface mb-4">
-            Still have questions?
-          </h2>
-          <p className="text-body-lg text-on-surface-variant max-w-xl mx-auto mb-8">
-            We would rather answer your questions than have you wonder. Reach out
-            directly or take the free assessment to get started.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/contact" className="btn-primary">
-              Get in touch
-            </Link>
-            <Link href="/assessment" className="btn-amber">
-              Take the free assessment
-            </Link>
-          </div>
-        </div>
-      </section>
+      {/* ═══════════════════════════════════════════════════════
+          CLOSING CTA
+          ═══════════════════════════════════════════════════════ */}
+      <CTASection
+        headline="Still have a question only an assessment can answer?"
+        description="The free assessment is the fastest way to find out whether Reconnect is right for your body — and which track."
+        primaryHref="/assessment"
+        primaryLabel="Take free assessment"
+        secondaryHref="/contact"
+        secondaryLabel="Ask the team"
+        variant="sage"
+      />
     </>
   );
 }

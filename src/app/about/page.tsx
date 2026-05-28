@@ -1,171 +1,297 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import Section from "@/components/Section";
+import SectionHeader from "@/components/SectionHeader";
+import Eyebrow from "@/components/Eyebrow";
+import Reveal from "@/components/Reveal";
+import Stagger from "@/components/Stagger";
+import Button from "@/components/Button";
+import Pill from "@/components/Pill";
+import CTASection from "@/components/CTASection";
+import { SkeletonSvg, SpineSvg, KneeSvg } from "@/components/AnatomicalArt";
 
 export const metadata: Metadata = {
-  title: "About Dr. Shruthi Desai",
+  title: "About Dr. Shruthi",
   description:
-    "Meet Dr. Shruthi Desai — the rheumatologist behind Reconnect. Learn why she created a strength-based program for people living with joint pain, arthritis, and bone conditions.",
+    "Dr. Shruthi Desai, rheumatologist. MBBS, MD (Internal Medicine), DM (Rheumatology). Reconnect exists because she saw patients harmed by generic exercise advice.",
 };
 
-const pillars = [
+/* ── Data ──────────────────────────────────────────────────── */
+
+const doctorLed = [
   {
-    icon: "healing",
-    title: "Pain-First Approach",
-    description:
-      "We never push through pain blindly. Every program begins with a clinical understanding of your pain — its source, its triggers, and the safest way to build strength around it.",
+    title: "Medical assessment first",
+    body: "Every program begins with a rheumatologist-led intake. Nothing is prescribed without understanding the body it’s for.",
   },
   {
-    icon: "tune",
-    title: "Personalized to Condition",
-    description:
-      "Osteoarthritis is not osteoporosis. A disc bulge is not frozen shoulder. Your program is built around your specific diagnosis, imaging, and medication — not a one-size template.",
+    title: "Program tuned to diagnosis",
+    body: "The exercise, the load, the progression — all shaped by your condition, your imaging, your pain map. Not your height and weight.",
   },
   {
-    icon: "medical_information",
-    title: "Non-Surgical Focus",
-    description:
-      "Surgery is sometimes necessary — but far too often, it is the first option offered when conservative, strength-based approaches have not been tried. We focus on what can be done before the operating table.",
+    title: "Works alongside your medication",
+    body: "We don’t modify your prescriptions. The program runs alongside the care your physician is already providing — never instead of it.",
   },
-];
+  {
+    title: "Coordinates with your treating doctor",
+    body: "Where appropriate, we share progress notes and respect any restrictions your surgeon or physician has set.",
+  },
+] as const;
+
+const tracks = [
+  { name: "Prevent", note: "For 40+, family history, post-menopausal bone health.", href: "/programs/prevent" },
+  { name: "Manage",  note: "For active arthritis, joint pain, back & neck pain, disc bulge.", href: "/programs/manage" },
+  { name: "Recover", note: "For post-surgery, severe OA, fracture recovery.", href: "/programs/recover" },
+] as const;
+
+/* ── Page ──────────────────────────────────────────────────── */
 
 export default function AboutPage() {
   return (
     <>
-      {/* Hero */}
-      <section className="py-16 md:py-24">
-        <div className="max-w-[1200px] mx-auto px-5 md:px-16">
-          <div className="flex flex-col md:flex-row gap-10 md:gap-16 items-center">
-            {/* Portrait */}
-            <div className="w-full md:w-5/12">
-              <div className="rounded-2xl overflow-hidden aspect-[3/4] soft-shadow border border-surface-variant">
-                <img
-                  src="/dr-shruthi.jpg"
-                  alt="Dr. Shruthi Desai, Rheumatologist and founder of Reconnect Wellness"
-                  className="w-full h-full object-cover object-top"
-                />
-              </div>
-            </div>
+      {/* ═══════════════════════════════════════════════════════
+          1) HERO — editorial portrait + credentials
+          ═══════════════════════════════════════════════════════ */}
+      <section className="relative overflow-hidden bg-bone pt-32 md:pt-40 pb-20 md:pb-28">
+        <SkeletonSvg className="watermark text-ink right-[-140px] top-[60px] w-[560px] hidden md:block" />
 
-            {/* Intro */}
-            <div className="w-full md:w-7/12">
-              <p className="text-label-md text-primary uppercase tracking-widest mb-3">
-                The Doctor Behind Reconnect
-              </p>
-              <h1 className="text-display-lg-mobile md:text-display-lg text-on-surface mb-6">
-                Strength training, prescribed by your rheumatologist.
-              </h1>
-              <p className="text-body-lg text-on-surface-variant mb-4">
-                Dr. Shruthi Desai is a practising rheumatologist with deep
-                expertise in autoimmune and musculoskeletal conditions. She is not
-                a surgeon, not a fitness influencer, and not a physio — she is a
-                physician who understands that the right kind of strength training
-                can transform outcomes for people living with chronic joint and
-                bone conditions.
-              </p>
-              <p className="text-body-lg text-on-surface-variant">
-                Reconnect was born from her clinical experience: watching patients
-                lose mobility, confidence, and independence — not because medicine
-                failed them, but because no one prescribed the movement they
-                needed alongside it.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* The Physician's Journey */}
-      <section className="bg-surface-container-low py-12 md:py-20">
-        <div className="max-w-[1200px] mx-auto px-5 md:px-16">
-          <div className="max-w-3xl mx-auto text-center">
-            <h2 className="text-headline-md-mobile md:text-headline-md text-on-surface mb-8">
-              The Physician&apos;s Journey
-            </h2>
-            <blockquote className="relative">
-              <span className="text-6xl text-primary/20 font-[var(--font-display)] absolute -top-4 -left-2 select-none">
-                &ldquo;
-              </span>
-              <p className="text-body-lg text-on-surface-variant italic leading-relaxed pl-6">
-                I spent years prescribing medication and watching patients
-                improve — but only to a point. Their inflammation would settle,
-                but their muscles had atrophied, their joints had stiffened, and
-                their confidence had eroded. I kept thinking: we are treating the
-                disease, but we are not rebuilding the person. Reconnect is my
-                answer to that gap. It is not a gym. It is not physiotherapy. It
-                is a medically designed strength program that works with your
-                treatment, not instead of it.
-              </p>
-              <footer className="mt-6">
-                <p className="text-title-lg text-on-surface">
-                  Dr. Shruthi Desai
+        <div className="container-site relative">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-end">
+            <div className="lg:col-span-7 order-2 lg:order-1">
+              <Reveal>
+                <Eyebrow>Your medical lead</Eyebrow>
+              </Reveal>
+              <Reveal delay={0.1}>
+                <h1 className="text-hero text-ink mt-6 leading-[0.95]">
+                  Dr.&nbsp;Shruthi <span className="serif-italic text-clay">Desai.</span>
+                </h1>
+              </Reveal>
+              <Reveal delay={0.2}>
+                <p className="text-body-lg text-ink-soft mt-6 max-w-xl">
+                  MBBS, MD (Internal Medicine), DM (Rheumatology).
+                  <br className="hidden sm:block" />
+                  Rheumatologist. Non-surgical. The doctor who designed Reconnect.
                 </p>
-                <p className="text-body-md text-on-surface-variant">
-                  MBBS, MD (Medicine), DM (Rheumatology)
-                </p>
-              </footer>
-            </blockquote>
-          </div>
-        </div>
-      </section>
+              </Reveal>
 
-      {/* Philosophy Pillars */}
-      <section className="py-12 md:py-20">
-        <div className="max-w-[1200px] mx-auto px-5 md:px-16">
-          <div className="text-center mb-12">
-            <h2 className="text-headline-md-mobile md:text-headline-md text-on-surface mb-4">
-              The Reconnect Philosophy
-            </h2>
-            <p className="text-body-lg text-on-surface-variant max-w-2xl mx-auto">
-              Three principles guide every program, every recommendation, and
-              every conversation we have with our members.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {pillars.map((pillar) => (
-              <div
-                key={pillar.title}
-                className="bg-surface-container-lowest rounded-xl hairline-border soft-shadow p-6 flex flex-col"
-              >
-                <div className="w-12 h-12 rounded-full bg-secondary-container flex items-center justify-center mb-5">
-                  <span className="material-symbols-outlined text-primary">
-                    {pillar.icon}
-                  </span>
+              <Reveal delay={0.3}>
+                <div className="flex flex-wrap gap-2 mt-8">
+                  <Pill variant="sage">Rheumatology</Pill>
+                  <Pill variant="sage">Non-surgical</Pill>
+                  <Pill variant="sage">Bones &amp; joints</Pill>
+                  <Pill variant="sage">Personalised strength</Pill>
                 </div>
-                <h3 className="text-title-lg text-on-surface mb-3">
-                  {pillar.title}
-                </h3>
-                <p className="text-body-md text-on-surface-variant">
-                  {pillar.description}
-                </p>
-              </div>
-            ))}
+              </Reveal>
+
+              <Reveal delay={0.4}>
+                <div className="mt-10 flex flex-wrap items-center gap-4">
+                  <Button variant="clay" size="lg" href="/assessment" arrow>
+                    Take free assessment
+                  </Button>
+                  <Button variant="ghost" size="lg" href="/contact">
+                    Book consultation
+                  </Button>
+                </div>
+              </Reveal>
+            </div>
+
+            <div className="lg:col-span-5 order-1 lg:order-2">
+              <Reveal delay={0.15}>
+                <figure className="relative">
+                  <div className="relative rounded-[20px] overflow-hidden shadow-lifted xray-glow">
+                    {/* TODO: replace with Dr. Shruthi's preferred high-resolution editorial portrait */}
+                    <img
+                      src="/dr-shruthi.jpg"
+                      alt="Dr. Shruthi Desai, Rheumatologist and founder of Reconnect Wellness"
+                      loading="eager"
+                      className="w-full h-[420px] md:h-[520px] object-cover"
+                    />
+                  </div>
+                  <figcaption className="text-caption text-ink-soft mt-4 max-w-xs">
+                    Dr.&nbsp;Shruthi Desai, founder &amp; medical lead — Reconnect Wellness.
+                  </figcaption>
+                </figure>
+              </Reveal>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* CTA */}
-      <section className="bg-primary text-on-primary py-12 md:py-20">
-        <div className="max-w-[1200px] mx-auto px-5 md:px-16 text-center">
-          <h2 className="text-headline-md-mobile md:text-headline-md text-on-primary mb-4">
-            Work with a doctor who understands movement
-          </h2>
-          <p className="text-body-lg text-on-primary/80 max-w-xl mx-auto mb-8">
-            Start with a free assessment to see if Reconnect is the right fit for
-            your condition — or book a consultation directly with Dr. Shruthi.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/assessment" className="btn-amber">
-              Take the free assessment
-            </Link>
-            <Link
-              href="/contact"
-              className="btn-secondary !text-on-primary !border-on-primary/40 hover:!bg-on-primary/10"
-            >
-              Book a consultation
-            </Link>
+      {/* ═══════════════════════════════════════════════════════
+          2) ORIGIN STORY — long-form editorial
+          ═══════════════════════════════════════════════════════ */}
+      <Section bg="bg-bone-deep">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
+          <div className="lg:col-span-4">
+            <SectionHeader
+              eyebrowNumber="(01)"
+              eyebrow="Origin"
+              title="How Reconnect came to be."
+              align="left"
+            />
+          </div>
+
+          <div className="lg:col-span-8">
+            <Reveal>
+              <div className="prose-editorial flex flex-col gap-6 text-body-lg text-ink-soft max-w-2xl">
+                <p>
+                  Shruthi trained in internal medicine before specialising in rheumatology. Her
+                  clinical days are spent with people living with chronic conditions and chronic
+                  pain — arthritis, joint pain, bone loss, autoimmune disease. She does not
+                  operate. Surgical cases are referred to orthopaedics; she stays with the
+                  longer arc of care that sits before and after the OR.
+                </p>
+
+                <p>
+                  Reconnect began broader than it is today. The early idea was to support
+                  patients across the spectrum of lifestyle conditions —
+                  metabolic, cardiovascular, musculoskeletal. But six months in, the pattern in
+                  patient response was unmistakable. The members who improved fastest, who
+                  stuck with the program, who came back with measurably better outcomes — they
+                  were the ones with bone and joint conditions, on personalised strength training.
+                </p>
+
+                <p>
+                  So she narrowed. Reconnect now does one thing, and tries to do it as well as
+                  any clinic in the country: rheumatologist-led, personalised strength training
+                  for the bones and joints.
+                </p>
+
+                <p>
+                  The reason it exists is plainer than the methodology. Too many of her patients
+                  arrived at the clinic having been harmed by generic exercise advice — a
+                  YouTube routine that flared a knee, a gym programme that worsened a disc, a
+                  fitness app prescribing impact loading to someone with osteoporosis. The cost
+                  of getting it wrong, at this end of medicine, is high. Reconnect is the
+                  alternative she wanted to be able to offer them.
+                </p>
+              </div>
+            </Reveal>
           </div>
         </div>
+      </Section>
+
+      {/* ═══════════════════════════════════════════════════════
+          3) PHILOSOPHY PULL-QUOTE
+          ═══════════════════════════════════════════════════════ */}
+      <section className="relative bg-bone section-py overflow-hidden">
+        <SpineSvg className="watermark text-ink left-[-100px] top-[30px] w-[440px] hidden md:block" />
+
+        <div className="container-site relative">
+          <Reveal>
+            <div className="max-w-4xl">
+              <Eyebrow number="(02)">Philosophy</Eyebrow>
+
+              <blockquote className="mt-10">
+                <p className="text-hero text-ink leading-[1.05]">
+                  We work around the pain,{" "}
+                  <span className="serif-italic text-clay">respect it,</span> and reduce it.
+                </p>
+                <p className="text-h3 font-display text-ink-soft mt-8 max-w-3xl">
+                  Pain-first. Doctor-led. Designed for the body in front of us — never a
+                  template.
+                </p>
+                <footer className="text-caption text-ink-soft mt-8">
+                  — Dr.&nbsp;Shruthi Desai, on the principles behind Reconnect
+                </footer>
+              </blockquote>
+            </div>
+          </Reveal>
+        </div>
       </section>
+
+      {/* ═══════════════════════════════════════════════════════
+          4) WHAT "DOCTOR-LED" MEANS — practice list
+          ═══════════════════════════════════════════════════════ */}
+      <Section bg="bg-bone-deep">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
+          <div className="lg:col-span-5">
+            <SectionHeader
+              eyebrowNumber="(03)"
+              eyebrow="In practice"
+              title={`What “doctor-led” actually means.`}
+              description="It’s not a label — it’s a way of working that shows up at every step."
+              align="left"
+            />
+          </div>
+
+          <div className="lg:col-span-7">
+            <Stagger className="flex flex-col" staggerDelay={0.08}>
+              {doctorLed.map((item, i) => (
+                <div
+                  key={item.title}
+                  className={`flex gap-6 py-7 ${
+                    i !== doctorLed.length - 1 ? "border-b border-line" : ""
+                  }`}
+                >
+                  <span className="text-eyebrow text-clay shrink-0 pt-1 w-10">
+                    0{i + 1}
+                  </span>
+                  <div>
+                    <h4 className="text-h4 font-display text-ink mb-2">{item.title}</h4>
+                    <p className="text-body text-ink-soft">{item.body}</p>
+                  </div>
+                </div>
+              ))}
+            </Stagger>
+          </div>
+        </div>
+      </Section>
+
+      {/* ═══════════════════════════════════════════════════════
+          5) WHY BONES & JOINTS — tracks + all-ages framing
+          ═══════════════════════════════════════════════════════ */}
+      <section className="relative bg-bone section-py overflow-hidden">
+        <KneeSvg className="watermark text-ink right-[-80px] bottom-[60px] w-[420px] hidden md:block" />
+
+        <div className="container-site relative">
+          <SectionHeader
+            eyebrowNumber="(04)"
+            eyebrow="Why bones & joints"
+            title="The one thing we do — for every age."
+            description="Bone and joint health is not just a problem for the elderly. It is a 40-year arc — and the early years are when you have the most leverage."
+            align="left"
+            className="mb-12 max-w-3xl"
+          />
+
+          <Reveal>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-12">
+              {tracks.map((t, i) => (
+                <a
+                  key={t.name}
+                  href={t.href}
+                  className="group bg-calcium rounded-[18px] p-6 md:p-7 hairline hover-lift flex flex-col gap-3 h-full"
+                >
+                  <div className="flex items-baseline justify-between">
+                    <span className="text-eyebrow text-clay">Track 0{i + 1}</span>
+                    <span className="text-clay opacity-0 group-hover:opacity-100 transition-opacity duration-200">→</span>
+                  </div>
+                  <h4 className="text-h3 font-display text-ink">{t.name}</h4>
+                  <p className="text-body-sm text-ink-soft">{t.note}</p>
+                </a>
+              ))}
+            </div>
+          </Reveal>
+
+          <Reveal delay={0.15}>
+            <p className="text-body-lg text-ink-soft max-w-3xl border-l border-clay pl-6 serif-italic">
+              The same method runs under all three. The assessment decides which one is yours —
+              and exactly how it’s built.
+            </p>
+          </Reveal>
+        </div>
+      </section>
+
+      {/* ═══════════════════════════════════════════════════════
+          6) FINAL CTA
+          ═══════════════════════════════════════════════════════ */}
+      <CTASection
+        headline="Want to talk it through?"
+        description="Take the assessment, or book a consultation directly with Dr. Shruthi’s team."
+        primaryHref="/assessment"
+        primaryLabel="Take free assessment"
+        secondaryHref="/contact"
+        secondaryLabel="Book consultation"
+        variant="sage"
+      />
     </>
   );
 }

@@ -1,27 +1,36 @@
 import type { Metadata } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Inter, Libre_Franklin } from "next/font/google";
 import "./globals.css";
-import LayoutShell from "@/components/LayoutShell";
+import SmoothScroll from "@/components/SmoothScroll";
+import Nav from "@/components/Nav";
+import Footer from "@/components/Footer";
 
-const fraunces = Fraunces({
-  variable: "--font-display",
+/**
+ * Fonts match the live brand reference at
+ *   https://reconnect-main-site-ui.vercel.app/
+ * Inter for headings + body; Libre Franklin for the brand wordmark.
+ */
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
   display: "swap",
 });
 
-const inter = Inter({
-  variable: "--font-body",
+const libreFranklin = Libre_Franklin({
+  variable: "--font-libre-franklin",
   subsets: ["latin"],
   display: "swap",
+  weight: ["500", "600", "700"],
 });
 
 export const metadata: Metadata = {
   title: {
-    default: "Reconnect Wellness | Doctor-Led Strength Training for Joint Pain, Arthritis & Bone Health",
+    default:
+      "Reconnect Wellness | Doctor-Led Strength Training for Joint Pain, Arthritis & Bone Health",
     template: "%s | Reconnect Wellness",
   },
   description:
-    "A personalized, rheumatologist-designed strength and nutrition program for joint pain, arthritis, back & disc issues, and osteoporosis. Doctor-led, not generic workouts.",
+    "A personalised, rheumatologist-designed strength and nutrition programme for joint pain, arthritis, back & disc issues, and osteoporosis. Doctor-led, not generic workouts.",
   keywords: [
     "arthritis exercise program",
     "knee pain strength training",
@@ -34,40 +43,39 @@ export const metadata: Metadata = {
     "bone health program",
   ],
   openGraph: {
-    title: "Reconnect Wellness | Stronger Joints. Denser Bones. A Life Without Pain.",
+    title:
+      "Reconnect Wellness | Stronger Joints. Denser Bones. A Life Without Pain.",
     description:
-      "A personalized, doctor-designed strength and nutrition program for joint pain, arthritis, and osteoporosis.",
+      "A personalised, doctor-designed strength and nutrition programme for joint pain, arthritis, and osteoporosis.",
     type: "website",
     locale: "en_IN",
     siteName: "Reconnect Wellness",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Reconnect Wellness | Doctor-Led Joint & Bone Health Programs",
+    title:
+      "Reconnect Wellness | Doctor-Led Joint & Bone Health Programs",
     description:
-      "Personalized strength training designed by a rheumatologist for joint pain, arthritis, and bone health.",
+      "Personalised strength training designed by a rheumatologist for joint pain, arthritis, and bone health.",
   },
-  robots: {
-    index: true,
-    follow: true,
-  },
+  robots: { index: true, follow: true },
 };
 
 export default function RootLayout({
   children,
-}: Readonly<{
-  children: React.ReactNode;
-}>) {
+}: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en" className={`${fraunces.variable} ${inter.variable} scroll-smooth`}>
-      <head>
-        <link
-          href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap"
-          rel="stylesheet"
-        />
-      </head>
-      <body className="min-h-screen flex flex-col bg-surface text-on-surface antialiased">
-        <LayoutShell>{children}</LayoutShell>
+    <html
+      lang="en"
+      data-scroll-behavior="smooth"
+      className={`${inter.variable} ${libreFranklin.variable}`}
+    >
+      <body className="min-h-dvh flex flex-col bg-bone text-ink antialiased">
+        <SmoothScroll>
+          <Nav />
+          <main className="flex-1">{children}</main>
+          <Footer />
+        </SmoothScroll>
       </body>
     </html>
   );

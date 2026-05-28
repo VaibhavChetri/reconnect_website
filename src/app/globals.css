@@ -404,6 +404,52 @@ body::after {
 }
 
 
+/* Animated scroll-down indicator (vertical bar that travels down a track).
+   Used in the hero. Reduced-motion users get a static bar. */
+@keyframes scroll-down-tick {
+  0%   { transform: translateY(-100%); opacity: 0; }
+  20%  { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { transform: translateY(300%); opacity: 0; }
+}
+.scroll-tick {
+  animation: scroll-down-tick 2.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .scroll-tick { animation: none; opacity: 0.6; }
+}
+
+
+/* Brand pulse dot — used inside the hero "Rheumatologist-led" chip.
+   Pure CSS so it works inside a server component. */
+.brand-pulse-dot {
+  display: inline-block;
+  width: 0.5rem;
+  height: 0.5rem;
+  border-radius: 9999px;
+  background: var(--color-clay);
+  position: relative;
+}
+.brand-pulse-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: var(--color-clay);
+  opacity: 0.5;
+  animation: brand-pulse 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+  pointer-events: none;
+}
+@keyframes brand-pulse {
+  0%   { transform: scale(1);   opacity: 0.6; }
+  70%  { transform: scale(2.2); opacity: 0;   }
+  100% { transform: scale(2.2); opacity: 0;   }
+}
+@media (prefers-reduced-motion: reduce) {
+  .brand-pulse-dot::after { animation: none; }
+}
+
+
 /* ═══════════════════════════════════════════════════════════════
    SCROLL REVEAL ENHANCEMENTS
    ═══════════════════════════════════════════════════════════════ */

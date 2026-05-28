@@ -115,23 +115,7 @@ export default function Footer() {
 
   return (
     <footer className="relative overflow-hidden mt-auto">
-      {/* ═══ A) CTA Band ═══════════════════════════════════════ */}
-      <section className="bg-sage text-bone py-20 md:py-28">
-        <div className="container-site text-center max-w-3xl mx-auto flex flex-col items-center gap-6">
-          <h2 className="text-h2 font-display text-bone">
-            Your joints deserve better than painkillers and&nbsp;rest.
-          </h2>
-          <p className="text-body-lg text-bone/70 max-w-2xl">
-            Take a 2-minute assessment and find out which programme is right for
-            your body.
-          </p>
-          <Button variant="clay" href="/assessment" size="lg" arrow>
-            Start free assessment
-          </Button>
-        </div>
-      </section>
-
-      {/* ═══ B) Main Footer ════════════════════════════════════ */}
+      {/* ═══ Main Footer ═══════════════════════════════════════ */}
       <section className="relative bg-sage-deep text-bone">
         <div className="container-site py-16 md:py-20">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr_1fr] gap-10 md:gap-8">
@@ -215,7 +199,7 @@ export default function Footer() {
         <div className="border-t border-bone/10">
           <div className="container-site py-6 flex flex-col md:flex-row items-center justify-between gap-4">
             <p className="text-caption text-bone/40">
-              Designed by Dr.&nbsp;Shruthi Desai, Rheumatologist.
+              Rheumatologist-led · Non-surgical · Bones &amp; joints.
             </p>
 
             {/* Social icons */}

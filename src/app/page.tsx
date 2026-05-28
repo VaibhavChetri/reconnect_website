@@ -14,6 +14,8 @@ import ScrollMarquee from "@/components/ScrollMarquee";
 import BentoGrid, { BentoItem } from "@/components/BentoGrid";
 import JourneyStepper from "@/components/JourneyStepper";
 import CTASection from "@/components/CTASection";
+import SpotlightCard from "@/components/SpotlightCard";
+import TiltCard from "@/components/TiltCard";
 import {
   HandSvg,
   HipSvg,
@@ -24,6 +26,7 @@ import {
 import { sciencePoints } from "@/lib/content/science";
 import { plans } from "@/lib/content/pricing";
 import TestimonialsSlider from "./_components/TestimonialsSlider";
+import HeroMedia from "./_components/HeroMedia";
 
 export const metadata: Metadata = {
   title: "Reconnect Wellness — Doctor-Led Strength Training for Bones & Joints",
@@ -112,95 +115,101 @@ export default function HomePage() {
   return (
     <>
       {/* ════════════════════════════════════════════════════════
-          1) HERO — full-viewport background media + text left column
-             TODO: swap <img src="/woman-dumbbell.jpg" /> for a
-             muted looping <video> when the real footage arrives.
+          1) HERO — full-bleed video, bottom-anchored editorial copy,
+                    floating glass credibility chip, scroll indicator.
           ════════════════════════════════════════════════════════ */}
-      <section className="relative min-h-[100svh] flex items-center overflow-hidden bg-bone">
-        {/* ── Background media ─────────────────────────────────── */}
+      <section className="relative min-h-[100svh] overflow-hidden bg-sage-deep">
+        {/* ── Background video ─────────────────────────────────── */}
         <div className="absolute inset-0">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src="/woman-dumbbell.jpg"
-            alt=""
-            aria-hidden="true"
-            className="w-full h-full object-cover object-[70%_center]"
-          />
+          <HeroMedia />
 
-          {/* Strong left-to-right scrim so headline reads cleanly while
-              the subject stays visible on the right ~45% of the frame */}
+          {/* Bottom-up gradient — Apple/Netflix style. Keeps the video
+              clean at top, deepens to dark at bottom for content legibility. */}
           <div
             className="absolute inset-0 pointer-events-none"
             style={{
               background:
-                "linear-gradient(90deg, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.92) 30%, rgba(255,255,255,0.55) 50%, rgba(255,255,255,0.05) 75%, rgba(255,255,255,0) 100%)",
+                "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(0,0,0,0.10) 35%, rgba(0,0,0,0.55) 70%, rgba(0,0,0,0.85) 100%)",
             }}
             aria-hidden="true"
           />
 
-          {/* Soft bottom fade so the section blends into the next */}
+          {/* Subtle brand-navy wash so the video sits in palette */}
           <div
-            className="absolute inset-x-0 bottom-0 h-32 pointer-events-none"
+            className="absolute inset-0 pointer-events-none mix-blend-multiply"
             style={{
               background:
-                "linear-gradient(180deg, transparent, rgba(255,255,255,0.85))",
-            }}
-            aria-hidden="true"
-          />
-
-          {/* Brand-blue x-ray glow behind the text column */}
-          <div
-            className="absolute inset-0 pointer-events-none"
-            style={{
-              background:
-                "radial-gradient(40% 50% at 20% 50%, rgba(0,100,224,0.10), transparent 70%)",
+                "linear-gradient(180deg, rgba(0,41,92,0.12) 0%, rgba(0,41,92,0.25) 100%)",
             }}
             aria-hidden="true"
           />
         </div>
 
-        {/* Faint anatomical watermark anchored to the right edge */}
-        <SkeletonSvg className="absolute right-[-160px] bottom-[10%] w-[560px] text-ink opacity-[0.05] pointer-events-none hidden lg:block" />
+        {/* ═══ Bottom-anchored content ═════════════════════════════ */}
+        <div className="absolute inset-x-0 bottom-0 z-10">
+          <div className="container-site pb-12 md:pb-20 lg:pb-24">
+            <div className="max-w-3xl">
+              <h1
+                className="font-display text-bone leading-[1.02] tracking-[-0.025em] drop-shadow-[0_2px_24px_rgba(0,0,0,0.5)]"
+                style={{ fontSize: "clamp(2.4rem, 5.8vw, 5.5rem)" }}
+              >
+                <span className="block">
+                  <SplitRevealInline delay={0.08}>
+                    <span>Stronger joints. Denser bones.</span>
+                  </SplitRevealInline>
+                </span>
+                <span className="block mt-1">
+                  <SplitRevealInline delay={0.28}>
+                    <span>
+                      A life without the{" "}
+                      <em className="serif-italic text-clay-soft not-italic">pain.</em>
+                    </span>
+                  </SplitRevealInline>
+                </span>
+              </h1>
 
-        {/* ── Text column ─────────────────────────────────────── */}
-        <div className="container-site relative w-full pt-32 md:pt-40 pb-20 md:pb-28">
-          <div className="max-w-xl lg:max-w-2xl">
-            <div className="flex flex-col gap-1">
-              <SplitReveal as="h1" className="text-hero text-ink" delay={0.1}>
-                Stronger joints.
-              </SplitReveal>
-              <SplitReveal as="h1" className="text-hero text-ink" delay={0.22}>
-                Denser bones.
-              </SplitReveal>
-              <SplitReveal as="h1" className="text-hero text-ink" delay={0.34}>
-                A life without the
-              </SplitReveal>
-              <span className="text-hero text-ink leading-[0.98]">
-                <SplitRevealInline delay={0.48}>
-                  <em className="serif-italic text-clay not-italic">pain.</em>
-                </SplitRevealInline>
-              </span>
+              <Reveal delay={0.55}>
+                <p className="text-body-lg text-bone/85 mt-6 max-w-xl drop-shadow-[0_2px_12px_rgba(0,0,0,0.5)]">
+                  A doctor-designed strength and nutrition program for arthritis,
+                  joint pain, back issues, and osteoporosis.
+                </p>
+              </Reveal>
+
+              <Reveal delay={0.7}>
+                <div className="mt-8 flex flex-wrap items-center gap-3">
+                  <Button variant="clay" size="lg" href="/assessment" arrow>
+                    Take free assessment
+                  </Button>
+
+                  {/* Premium glass secondary CTA — visible on any video frame */}
+                  <Link
+                    href="/contact"
+                    className="group inline-flex items-center gap-2 px-7 py-4 rounded-pill bg-bone/10 backdrop-blur-md border border-bone/35 text-bone font-medium text-body hover:bg-bone/20 hover:border-bone/60 transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)]"
+                  >
+                    Book consultation
+                    <svg
+                      width="16"
+                      height="16"
+                      viewBox="0 0 16 16"
+                      fill="none"
+                      aria-hidden="true"
+                      className="transition-transform duration-300 group-hover:translate-x-1"
+                    >
+                      <path
+                        d="M3 8h10m0 0L9 4m4 4L9 12"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </Link>
+                </div>
+              </Reveal>
             </div>
-
-            <Reveal delay={0.7}>
-              <p className="text-body-lg text-ink-soft mt-8 max-w-lg">
-                A doctor-designed strength and nutrition program for arthritis, joint pain,
-                back issues, and osteoporosis. Built for real people — not athletes.
-              </p>
-            </Reveal>
-
-            <Reveal delay={0.85}>
-              <div className="mt-10 flex flex-wrap items-center gap-4">
-                <Button variant="clay" size="lg" href="/assessment" arrow>
-                  Take free assessment
-                </Button>
-                <Button variant="ghost" size="lg" href="/contact">
-                  Book consultation
-                </Button>
-              </div>
-            </Reveal>
           </div>
         </div>
+
       </section>
 
       {/* ════════════════════════════════════════════════════════
@@ -230,8 +239,6 @@ export default function HomePage() {
           ════════════════════════════════════════════════════════ */}
       <Section bg="bg-bone">
         <SectionHeader
-          eyebrowNumber="(01)"
-          eyebrow="Why Reconnect"
           title="Not random workouts. A program designed for your body."
           description="Most fitness apps give you the same plan as the next person. Reconnect doesn’t."
           align="left"
@@ -275,8 +282,6 @@ export default function HomePage() {
           ════════════════════════════════════════════════════════ */}
       <Section bg="bg-bone-deep">
         <SectionHeader
-          eyebrowNumber="(02)"
-          eyebrow="The Science"
           title="Why strength training changes everything."
           description="The evidence behind every program we design — measurable improvements across pain, bone, muscle, and degeneration."
           align="left"
@@ -285,49 +290,57 @@ export default function HomePage() {
 
         <BentoGrid>
           {/* Card 1 — larger */}
-          <BentoItem colSpan={2} className="glow-card relative p-8 md:p-10">
-            <div className="flex items-start justify-between mb-4">
-              <p className="text-eyebrow text-clay">Less pain</p>
-              <KneeSvg className="w-16 text-sage opacity-50" />
-            </div>
-            <p className="text-h3 font-display text-ink mb-3">
-              {sciencePoints[0].description}
-            </p>
-            {sciencePoints[0].stat && (
-              <p className="text-caption text-ink-soft">
-                Typical reduction in chronic pain scores reported across our 12-week cycles.
+          <BentoItem colSpan={2} className="p-0">
+            <SpotlightCard className="h-full p-8 md:p-10 rounded-card">
+              <div className="flex items-start justify-between mb-4">
+                <p className="text-eyebrow text-clay">Less pain</p>
+                <KneeSvg className="w-16 text-sage opacity-50" />
+              </div>
+              <p className="text-h3 font-display text-ink mb-3">
+                {sciencePoints[0].description}
               </p>
-            )}
+              {sciencePoints[0].stat && (
+                <p className="text-caption text-ink-soft">
+                  Typical reduction in chronic pain scores reported across our 12-week cycles.
+                </p>
+              )}
+            </SpotlightCard>
           </BentoItem>
 
           {/* Card 2 */}
-          <BentoItem className="glow-card p-8">
-            <div className="flex items-start justify-between mb-4">
-              <p className="text-eyebrow text-clay">Denser bones</p>
-              <SkeletonSvg className="w-14 text-sage opacity-50" />
-            </div>
-            <h3 className="text-h4 font-display text-ink mb-2">Bone formation</h3>
-            <p className="text-body-sm text-ink-soft">{sciencePoints[1].description}</p>
+          <BentoItem className="p-0">
+            <SpotlightCard className="h-full p-8 rounded-card">
+              <div className="flex items-start justify-between mb-4">
+                <p className="text-eyebrow text-clay">Denser bones</p>
+                <SkeletonSvg className="w-14 text-sage opacity-50" />
+              </div>
+              <h3 className="text-h4 font-display text-ink mb-2">Bone formation</h3>
+              <p className="text-body-sm text-ink-soft">{sciencePoints[1].description}</p>
+            </SpotlightCard>
           </BentoItem>
 
           {/* Card 3 */}
-          <BentoItem className="glow-card p-8">
-            <div className="flex items-start justify-between mb-4">
-              <p className="text-eyebrow text-clay">Retained muscle</p>
-              <HandSvg className="w-14 text-sage opacity-50" />
-            </div>
-            <h3 className="text-h4 font-display text-ink mb-2">Reverse sarcopenia</h3>
-            <p className="text-body-sm text-ink-soft">{sciencePoints[2].description}</p>
+          <BentoItem className="p-0">
+            <SpotlightCard className="h-full p-8 rounded-card">
+              <div className="flex items-start justify-between mb-4">
+                <p className="text-eyebrow text-clay">Retained muscle</p>
+                <HandSvg className="w-14 text-sage opacity-50" />
+              </div>
+              <h3 className="text-h4 font-display text-ink mb-2">Reverse sarcopenia</h3>
+              <p className="text-body-sm text-ink-soft">{sciencePoints[2].description}</p>
+            </SpotlightCard>
           </BentoItem>
 
           {/* Card 4 — wider */}
-          <BentoItem colSpan={2} className="p-8 md:p-10 hover-lift">
-            <div className="flex items-start justify-between mb-4">
-              <p className="text-eyebrow text-clay">Prevent degeneration</p>
-              <HipSvg className="w-16 text-sage opacity-50" />
-            </div>
-            <h3 className="text-h3 font-display text-ink mb-3">Joint protection</h3>
-            <p className="text-body text-ink-soft">{sciencePoints[3].description}</p>
+          <BentoItem colSpan={2} className="p-0">
+            <SpotlightCard className="h-full p-8 md:p-10 rounded-card">
+              <div className="flex items-start justify-between mb-4">
+                <p className="text-eyebrow text-clay">Prevent degeneration</p>
+                <HipSvg className="w-16 text-sage opacity-50" />
+              </div>
+              <h3 className="text-h3 font-display text-ink mb-3">Joint protection</h3>
+              <p className="text-body text-ink-soft">{sciencePoints[3].description}</p>
+            </SpotlightCard>
           </BentoItem>
         </BentoGrid>
       </Section>
@@ -338,8 +351,6 @@ export default function HomePage() {
       <section className="bg-bone py-20 md:py-28 overflow-hidden">
         <div className="container-site mb-12">
           <SectionHeader
-            eyebrowNumber="(03)"
-            eyebrow="Conditions we treat"
             title="Built for the conditions you actually live with."
             description="Find what you’re dealing with — each card links to the right track."
             align="left"
@@ -366,7 +377,6 @@ export default function HomePage() {
           ════════════════════════════════════════════════════════ */}
       <Section bg="bg-bone-deep">
         <SectionHeader
-          eyebrow="The journey"
           title="One connected method — always in this order."
           description="The four pillars are integrated, not bolted on. Assessment always comes first."
           align="center"
@@ -387,8 +397,6 @@ export default function HomePage() {
           ════════════════════════════════════════════════════════ */}
       <Section bg="bg-bone">
         <SectionHeader
-          eyebrowNumber="(04)"
-          eyebrow="Programs"
           title="Choose your path."
           description="Three tracks for where you are today. Each is personalised after your medical assessment."
           align="left"
@@ -397,42 +405,52 @@ export default function HomePage() {
 
         <Stagger className="grid grid-cols-1 md:grid-cols-3 gap-6" staggerDelay={0.1}>
           {tracks.map((t) => (
-            <Link
-              key={t.slug}
-              href={`/programs/${t.slug}`}
-              className="group glow-card relative rounded-[20px] overflow-hidden bg-calcium flex flex-col h-full"
-            >
-              <div className="relative aspect-[4/5] overflow-hidden">
-                {/* TODO: replace with consented track photo */}
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={t.image}
-                  alt=""
-                  aria-hidden="true"
-                  loading="lazy"
-                  className="w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.04]"
-                />
-                <t.Icon className="absolute right-5 top-5 w-16 text-bone/60 pointer-events-none" />
-              </div>
-
-              <div className="p-6 md:p-7 flex flex-col gap-4 flex-1">
-                <h3 className="text-h3 font-display text-ink">{t.name}</h3>
-                <p className="text-body text-ink-soft">{t.tagline}</p>
-                <div className="flex flex-wrap gap-2 mt-1">
-                  {t.tags.map((tag) => (
-                    <Pill key={tag} variant="sage">
-                      {tag}
-                    </Pill>
-                  ))}
+            <TiltCard key={t.slug} className="h-full rounded-[20px]" maxTilt={7} scale={1.025}>
+              <Link
+                href={`/programs/${t.slug}`}
+                className="group glow-card relative rounded-[20px] overflow-hidden bg-calcium flex flex-col h-full"
+              >
+                <div className="relative aspect-[4/5] overflow-hidden">
+                  {/* TODO: replace with consented track photo */}
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img
+                    src={t.image}
+                    alt=""
+                    aria-hidden="true"
+                    loading="lazy"
+                    className="w-full h-full object-cover transition-transform duration-700 ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.06]"
+                  />
+                  {/* Brand wash on hover */}
+                  <div
+                    className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                    style={{
+                      background:
+                        "linear-gradient(180deg, transparent 40%, rgba(0,41,92,0.55) 100%)",
+                    }}
+                    aria-hidden="true"
+                  />
+                  <t.Icon className="absolute right-5 top-5 w-16 text-bone/70 pointer-events-none drop-shadow-md" />
                 </div>
-                <span className="text-body-sm font-medium text-clay mt-auto inline-flex items-center gap-2">
-                  Explore {t.name}
-                  <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">
-                    <path d="M3 8h10m0 0L9 4m4 4L9 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                </span>
-              </div>
-            </Link>
+
+                <div className="p-6 md:p-7 flex flex-col gap-4 flex-1">
+                  <h3 className="text-h3 font-display text-ink">{t.name}</h3>
+                  <p className="text-body text-ink-soft">{t.tagline}</p>
+                  <div className="flex flex-wrap gap-2 mt-1">
+                    {t.tags.map((tag) => (
+                      <Pill key={tag} variant="sage">
+                        {tag}
+                      </Pill>
+                    ))}
+                  </div>
+                  <span className="text-body-sm font-medium text-clay mt-auto inline-flex items-center gap-2">
+                    Explore {t.name}
+                    <svg width="14" height="14" viewBox="0 0 16 16" fill="none" aria-hidden="true" className="transition-transform duration-300 group-hover:translate-x-1">
+                      <path d="M3 8h10m0 0L9 4m4 4L9 12" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                  </span>
+                </div>
+              </Link>
+            </TiltCard>
           ))}
         </Stagger>
       </Section>
@@ -445,8 +463,7 @@ export default function HomePage() {
 
         <div className="container-site relative">
           <Reveal>
-            <Eyebrow>(05) What makes us different</Eyebrow>
-            <h2 className="text-h2 font-display text-bone mt-6 max-w-3xl">
+            <h2 className="text-h2 font-display text-bone max-w-3xl">
               This isn’t a fitness app.{" "}
               <span className="serif-italic text-clay-soft">It’s medicine that moves you.</span>
             </h2>
@@ -526,8 +543,6 @@ export default function HomePage() {
           ════════════════════════════════════════════════════════ */}
       <Section bg="bg-bone-deep">
         <SectionHeader
-          eyebrowNumber="(06)"
-          eyebrow="Results"
           title="Real people, real outcomes."
           description="Three members on three different tracks. Stories shared with consent."
           align="left"
@@ -570,8 +585,6 @@ export default function HomePage() {
           ════════════════════════════════════════════════════════ */}
       <Section bg="bg-bone-deep">
         <SectionHeader
-          eyebrowNumber="(07)"
-          eyebrow="Pricing"
           title="Plans that fit your needs."
           description="All plans include a medical assessment and a personalised program. No long-term contracts."
           align="left"

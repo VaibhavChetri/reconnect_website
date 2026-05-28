@@ -387,8 +387,8 @@ function PlanCard({ plan }: { plan: Plan }) {
     <div
       className={`relative rounded-[20px] p-8 md:p-9 flex flex-col gap-6 h-full transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] ${
         isPopular
-          ? "bg-sage-deep text-bone shadow-lifted md:-mt-4 md:mb-4"
-          : "bg-calcium text-ink hairline shadow-card"
+          ? "glow-card glow-card-static bg-sage-deep text-bone shadow-lifted md:-mt-4 md:mb-4"
+          : "glow-card bg-calcium text-ink shadow-card"
       }`}
     >
       {/* Subtle clay glow on the popular card */}

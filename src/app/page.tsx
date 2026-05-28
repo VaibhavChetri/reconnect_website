@@ -243,7 +243,7 @@ export default function HomePage() {
           <div className="lg:col-span-7">
             <Stagger className="grid grid-cols-1 sm:grid-cols-2 gap-5" staggerDelay={0.08}>
               {proofCards.map((c, i) => (
-                <Card key={c.title} padding="md" className="bg-calcium flex flex-col gap-3 h-full hover-lift">
+                <Card key={c.title} padding="md" className="glow-card bg-calcium flex flex-col gap-3 h-full">
                   <span className="text-eyebrow text-clay">0{i + 1}</span>
                   <h3 className="text-h4 font-display text-ink">{c.title}</h3>
                   <p className="text-body-sm text-ink-soft">{c.body}</p>
@@ -285,7 +285,7 @@ export default function HomePage() {
 
         <BentoGrid>
           {/* Card 1 — larger */}
-          <BentoItem colSpan={2} className="relative p-8 md:p-10 hover-lift">
+          <BentoItem colSpan={2} className="glow-card relative p-8 md:p-10">
             <div className="flex items-start justify-between mb-4">
               <p className="text-eyebrow text-clay">Less pain</p>
               <KneeSvg className="w-16 text-sage opacity-50" />
@@ -301,7 +301,7 @@ export default function HomePage() {
           </BentoItem>
 
           {/* Card 2 */}
-          <BentoItem className="p-8 hover-lift">
+          <BentoItem className="glow-card p-8">
             <div className="flex items-start justify-between mb-4">
               <p className="text-eyebrow text-clay">Denser bones</p>
               <SkeletonSvg className="w-14 text-sage opacity-50" />
@@ -311,7 +311,7 @@ export default function HomePage() {
           </BentoItem>
 
           {/* Card 3 */}
-          <BentoItem className="p-8 hover-lift">
+          <BentoItem className="glow-card p-8">
             <div className="flex items-start justify-between mb-4">
               <p className="text-eyebrow text-clay">Retained muscle</p>
               <HandSvg className="w-14 text-sage opacity-50" />
@@ -400,7 +400,7 @@ export default function HomePage() {
             <Link
               key={t.slug}
               href={`/programs/${t.slug}`}
-              className="group relative rounded-[20px] overflow-hidden bg-calcium hairline hover-lift flex flex-col h-full"
+              className="group glow-card relative rounded-[20px] overflow-hidden bg-calcium flex flex-col h-full"
             >
               <div className="relative aspect-[4/5] overflow-hidden">
                 {/* TODO: replace with consented track photo */}
@@ -665,7 +665,7 @@ function ConditionCard({
   return (
     <Link
       href={href}
-      className="group shrink-0 w-[280px] md:w-[320px] bg-calcium rounded-[16px] p-5 hairline flex items-start gap-4 hover:shadow-soft transition-shadow duration-300"
+      className="group glow-card shrink-0 w-[280px] md:w-[320px] bg-calcium rounded-[16px] p-5 flex items-start gap-4"
     >
       <Icon className="w-10 text-sage opacity-70 shrink-0 group-hover:opacity-100 transition-opacity duration-300" />
       <div>

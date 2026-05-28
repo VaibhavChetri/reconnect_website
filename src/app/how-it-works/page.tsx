@@ -286,7 +286,7 @@ export default function HowItWorksPage() {
           {expectation.map((e, i) => (
             <div
               key={e.when}
-              className="relative bg-calcium rounded-[18px] p-6 md:p-7 hairline flex flex-col gap-3 h-full"
+              className="relative glow-card bg-calcium rounded-[18px] p-6 md:p-7 flex flex-col gap-3 h-full"
             >
               <div className="flex items-center justify-between">
                 <span className="text-eyebrow text-clay">{e.when}</span>

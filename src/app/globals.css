@@ -39,8 +39,11 @@
   /* Tertiary accent — used VERY sparingly (medical-flag red from reference) */
   --color-medical-accent: #C72525;
 
-  /* ── Typography (Inter + Libre Franklin per reference) ──── */
-  --font-display: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+  /* ── Typography ──────────────────────────────────────────────
+     Display = Geist (free analog to Neue Montreal used on
+     myhealthprac.com — modern grotesk, editorial). Body = Inter.
+     Brand wordmark = Libre Franklin. */
+  --font-display: "Geist", "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
   --font-body: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
   --font-brand: "Libre Franklin", "Inter", sans-serif;
 
@@ -62,7 +65,7 @@
 
 /* ── Next/font overrides (runtime) ─────────────────────────── */
 :root {
-  --font-display: var(--font-inter, "Inter"), -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-display: var(--font-geist, "Geist"), var(--font-inter, "Inter"), -apple-system, BlinkMacSystemFont, sans-serif;
   --font-body: var(--font-inter, "Inter"), -apple-system, BlinkMacSystemFont, sans-serif;
   --font-brand: var(--font-libre-franklin, "Libre Franklin"), "Inter", sans-serif;
 
@@ -305,6 +308,119 @@ body::after {
     box-shadow: var(--shadow-lifted);
   }
 }
+
+/* ═══════════════════════════════════════════════════════════════
+   GRADIENT BORDER HIGHLIGHTS  —  aihero.dev-style glowing edges
+   Use on cards/tiles. Add `.glow-card` to any element with a
+   rounded background; on hover the border tracks a brand-blue
+   gradient and a soft outer glow lifts it off the page.
+   Reduced-motion: drops the rotating gradient, keeps the static
+   border.
+   ═══════════════════════════════════════════════════════════════ */
+
+.glow-card {
+  position: relative;
+  isolation: isolate;
+  transition:
+    transform 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    box-shadow 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.glow-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 100, 224, 0.0) 0%,
+    rgba(0, 100, 224, 0.25) 30%,
+    rgba(1, 113, 227, 0.55) 50%,
+    rgba(0, 100, 224, 0.25) 70%,
+    rgba(0, 100, 224, 0.0) 100%
+  );
+  background-size: 200% 200%;
+  background-position: 0% 0%;
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask-composite: exclude;
+  opacity: 0;
+  transition:
+    opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1),
+    background-position 1.2s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+}
+
+.glow-card::after {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  background: radial-gradient(
+    60% 80% at 50% 50%,
+    rgba(0, 100, 224, 0.18),
+    transparent 70%
+  );
+  opacity: 0;
+  transition: opacity 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  pointer-events: none;
+  z-index: -1;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .glow-card:hover {
+    transform: translateY(-3px);
+    box-shadow:
+      0 16px 48px -12px rgba(0, 100, 224, 0.18),
+      0 4px 12px -4px rgba(29, 29, 31, 0.06);
+  }
+  .glow-card:hover::before {
+    opacity: 1;
+    background-position: 100% 100%;
+  }
+  .glow-card:hover::after {
+    opacity: 1;
+  }
+}
+
+/* "Always-on" gradient border variant (no hover state) — for
+   the popular plan / hero CTA contexts where the highlight is
+   permanent. */
+.glow-card-static::before {
+  opacity: 0.7;
+}
+
+/* Soft "inner ring" treatment for surface cards on bone-deep */
+.ring-soft {
+  box-shadow:
+    inset 0 0 0 1px rgba(0, 100, 224, 0.08),
+    0 1px 2px rgba(29, 29, 31, 0.03);
+}
+
+
+/* ═══════════════════════════════════════════════════════════════
+   SCROLL REVEAL ENHANCEMENTS
+   ═══════════════════════════════════════════════════════════════ */
+
+/* Scale-up on scroll for hero media */
+@media (prefers-reduced-motion: no-preference) {
+  .scroll-zoom {
+    animation: scroll-zoom linear both;
+    animation-timeline: view();
+    animation-range: entry cover 30%;
+  }
+  @keyframes scroll-zoom {
+    from { transform: scale(1.08); }
+    to   { transform: scale(1); }
+  }
+}
+
 
 /* Section number (oversized editorial) */
 .section-number {

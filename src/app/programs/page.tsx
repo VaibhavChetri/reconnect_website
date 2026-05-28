@@ -315,7 +315,7 @@ export default function ProgramsPage() {
           {conditionGroups.map((group) => {
             const Icon = group.icon;
             return (
-              <Card key={group.title} padding="md" className="flex flex-col gap-5 bg-calcium h-full">
+              <Card key={group.title} padding="md" className="glow-card flex flex-col gap-5 bg-calcium h-full">
                 <div className="flex items-center justify-between">
                   <h3 className="text-h4 font-display text-ink">{group.title}</h3>
                   <Icon className="w-10 text-sage opacity-60" />

@@ -185,7 +185,7 @@ export default function CGMPage() {
           {whoFor.map((item) => (
             <div
               key={item.label}
-              className="bg-calcium rounded-[18px] p-6 hairline flex flex-col gap-3 h-full"
+              className="glow-card bg-calcium rounded-[18px] p-6 flex flex-col gap-3 h-full"
             >
               <Pill variant="sage">{item.label}</Pill>
               <p className="text-body-sm text-ink-soft mt-1">{item.body}</p>
@@ -313,7 +313,7 @@ export default function CGMPage() {
                 <Link
                   key={t.name}
                   href={t.href}
-                  className="group bg-calcium rounded-[16px] p-5 hairline hover-lift flex flex-col gap-2 h-full"
+                  className="group glow-card bg-calcium rounded-[16px] p-5 flex flex-col gap-2 h-full"
                 >
                   <span className="text-eyebrow text-clay">Track 0{i + 1}</span>
                   <h3 className="text-h4 font-display text-ink">{t.name}</h3>

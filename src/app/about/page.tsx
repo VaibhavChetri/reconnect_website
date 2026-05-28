@@ -258,7 +258,7 @@ export default function AboutPage() {
                 <a
                   key={t.name}
                   href={t.href}
-                  className="group bg-calcium rounded-[18px] p-6 md:p-7 hairline hover-lift flex flex-col gap-3 h-full"
+                  className="group glow-card bg-calcium rounded-[18px] p-6 md:p-7 flex flex-col gap-3 h-full"
                 >
                   <div className="flex items-baseline justify-between">
                     <span className="text-eyebrow text-clay">Track 0{i + 1}</span>

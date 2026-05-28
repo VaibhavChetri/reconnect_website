@@ -1,15 +1,23 @@
 import type { Metadata } from "next";
-import { Inter, Libre_Franklin } from "next/font/google";
+import { Inter, Libre_Franklin, Geist } from "next/font/google";
 import "./globals.css";
 import SmoothScroll from "@/components/SmoothScroll";
 import Nav from "@/components/Nav";
 import Footer from "@/components/Footer";
 
 /**
- * Fonts match the live brand reference at
- *   https://reconnect-main-site-ui.vercel.app/
- * Inter for headings + body; Libre Franklin for the brand wordmark.
+ * Fonts:
+ *   • Geist          — display headings (closest free analog to Neue Montreal
+ *                      used on myhealthprac.com — modern grotesk, editorial)
+ *   • Inter          — body text (clinical, neutral, matches live brand ref)
+ *   • Libre Franklin — brand wordmark only (RECONNECT lockup)
  */
+const geist = Geist({
+  variable: "--font-geist",
+  subsets: ["latin"],
+  display: "swap",
+});
+
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
@@ -68,7 +76,7 @@ export default function RootLayout({
     <html
       lang="en"
       data-scroll-behavior="smooth"
-      className={`${inter.variable} ${libreFranklin.variable}`}
+      className={`${geist.variable} ${inter.variable} ${libreFranklin.variable}`}
     >
       <body className="min-h-dvh flex flex-col bg-bone text-ink antialiased">
         <SmoothScroll>

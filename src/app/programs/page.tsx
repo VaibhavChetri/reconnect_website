@@ -30,7 +30,6 @@ export const metadata: Metadata = {
 const tracks = [
   {
     slug: "prevent",
-    eyebrow: "Track 01",
     title: "Prevent",
     headline: "Stay ahead of the joints and bones you’ll need at 70.",
     description:
@@ -42,7 +41,6 @@ const tracks = [
   },
   {
     slug: "manage",
-    eyebrow: "Track 02",
     title: "Manage",
     headline: "Work around the pain. Then work it down.",
     description:
@@ -54,7 +52,6 @@ const tracks = [
   },
   {
     slug: "recover",
-    eyebrow: "Track 03",
     title: "Recover",
     headline: "Rebuild from surgery or severe wear — safely, with oversight.",
     description:
@@ -267,7 +264,6 @@ export default function ProgramsPage() {
 
                   {/* Copy */}
                   <div className="lg:col-span-5 flex flex-col gap-5">
-                    <Eyebrow>{track.eyebrow}</Eyebrow>
                     <h3 className="text-h2 font-display text-ink">{track.title}</h3>
                     <p className="serif-italic text-h4 text-ink-soft">{track.headline}</p>
                     <p className="text-body text-ink-soft">{track.description}</p>

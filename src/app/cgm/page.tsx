@@ -150,16 +150,18 @@ export default function CGMPage() {
           {steps.map((step, i) => (
             <div
               key={step.title}
-              className={`grid grid-cols-[60px_1fr] md:grid-cols-[120px_1fr] gap-6 md:gap-10 py-8 md:py-10 ${
+              className={`grid grid-cols-[80px_1fr] sm:grid-cols-[120px_1fr] md:grid-cols-[180px_1fr] gap-6 md:gap-10 py-10 md:py-14 items-start ${
                 i !== steps.length - 1 ? "border-b border-line" : ""
               }`}
             >
-              <div className="flex flex-col gap-2">
-                <span className="section-number text-sage-tint leading-none text-[3.5rem] md:text-[5rem]">
-                  0{i + 1}
-                </span>
-              </div>
-              <div className="pt-2 md:pt-4">
+              <span
+                className="font-display font-light text-sage-tint leading-none tabular-nums select-none"
+                style={{ fontSize: "clamp(2.75rem, 5vw, 4.5rem)" }}
+                aria-hidden="true"
+              >
+                0{i + 1}
+              </span>
+              <div>
                 <h3 className="text-h3 font-display text-ink mb-3">{step.title}</h3>
                 <p className="text-body text-ink-soft max-w-2xl">{step.body}</p>
               </div>
@@ -309,13 +311,12 @@ export default function CGMPage() {
                 { name: "Prevent", note: "Stay ahead of joint &amp; bone problems.", href: "/programs/prevent" },
                 { name: "Manage",  note: "Reduce arthritis &amp; joint pain.",       href: "/programs/manage"  },
                 { name: "Recover", note: "Rebuild post-surgery, severe OA.",        href: "/programs/recover" },
-              ].map((t, i) => (
+              ].map((t) => (
                 <Link
                   key={t.name}
                   href={t.href}
                   className="group glow-card bg-calcium rounded-[16px] p-5 flex flex-col gap-2 h-full"
                 >
-                  <span className="text-eyebrow text-clay">Track 0{i + 1}</span>
                   <h3 className="text-h4 font-display text-ink">{t.name}</h3>
                   <p
                     className="text-body-sm text-ink-soft"

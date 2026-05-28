@@ -18,6 +18,9 @@ type Region = {
 };
 
 const REGIONS: Region[] = [
+  // Coordinates tuned to skeleton.png (500×500) inside a 200×200 viewBox.
+  // y=0 is the top of the image; the skeleton spans roughly y=15 (skull)
+  // to y=185 (feet).
   {
     id: "neck",
     label: "Neck & Cervical",
@@ -27,7 +30,7 @@ const REGIONS: Region[] = [
     track: "/programs/manage",
     trackName: "Manage",
     cx: 100,
-    cy: 38,
+    cy: 30, // at the skull / cervical region
   },
   {
     id: "shoulder",
@@ -37,8 +40,8 @@ const REGIONS: Region[] = [
     conditions: ["Frozen shoulder", "Rotator cuff", "Impingement"],
     track: "/programs/manage",
     trackName: "Manage",
-    cx: 138,
-    cy: 70,
+    cx: 126,
+    cy: 50, // right shoulder joint
   },
   {
     id: "back",
@@ -49,7 +52,7 @@ const REGIONS: Region[] = [
     track: "/programs/manage",
     trackName: "Manage",
     cx: 100,
-    cy: 130,
+    cy: 68, // mid thoracic spine (between shoulders and waist)
   },
   {
     id: "hip",
@@ -60,7 +63,7 @@ const REGIONS: Region[] = [
     track: "/programs/recover",
     trackName: "Recover",
     cx: 100,
-    cy: 180,
+    cy: 98, // pelvis centre (on the iliac crest line)
   },
   {
     id: "knee",
@@ -70,8 +73,8 @@ const REGIONS: Region[] = [
     conditions: ["Knee osteoarthritis", "Ligament rehab", "Post-surgical"],
     track: "/programs/recover",
     trackName: "Recover",
-    cx: 86,
-    cy: 240,
+    cx: 108,
+    cy: 150, // right knee joint
   },
 ];
 
@@ -82,42 +85,35 @@ export default function BodyRegionDiagram() {
   const region = REGIONS.find((r) => r.id === active)!;
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-[220px_1fr] lg:grid-cols-[240px_1fr] gap-8 md:gap-10 items-start">
-      {/* ═══ Silhouette ═════════════════════════════════════════ */}
-      <div className="relative mx-auto md:mx-0 w-full max-w-[240px] aspect-[200/320]">
+    <div className="flex flex-col gap-7 md:gap-8 min-w-0">
+      {/* ═══ Skeleton silhouette — centred at the top of the card ═ */}
+      <div className="relative mx-auto w-full max-w-[360px] aspect-square">
         {/* Soft brand-blue radial backdrop */}
         <div
-          className="absolute inset-0 rounded-[28px] pointer-events-none"
+          className="absolute inset-0 rounded-[24px] pointer-events-none"
           style={{
             background:
-              "radial-gradient(60% 60% at 50% 45%, rgba(0,100,224,0.07), transparent 70%)",
+              "radial-gradient(60% 60% at 50% 50%, rgba(0,100,224,0.12), transparent 70%)",
           }}
           aria-hidden="true"
         />
 
+        {/* Anatomical skeleton image (sits behind the SVG dots) */}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img
+          src="/skeleton.png"
+          alt=""
+          aria-hidden="true"
+          className="absolute inset-0 w-full h-full object-contain select-none pointer-events-none"
+          draggable={false}
+        />
+
         <svg
-          viewBox="0 0 200 320"
-          className="relative w-full h-full text-ink-soft/30"
+          viewBox="0 0 200 200"
+          className="relative w-full h-full"
           aria-label="Body region selector"
         >
-          {/* Outline silhouette */}
-          <g
-            fill="none"
-            stroke="currentColor"
-            strokeWidth="1.25"
-            strokeLinejoin="round"
-            strokeLinecap="round"
-          >
-            <ellipse cx="100" cy="28" rx="16" ry="20" />
-            <path d="M92 47 L92 56 Q100 60 108 56 L108 47" />
-            <path d="M70 60 Q60 80 60 110 L65 175 Q70 195 80 200 L120 200 Q130 195 135 175 L140 110 Q140 80 130 60 Z" />
-            <path d="M60 70 Q40 95 38 140 Q40 165 50 170" />
-            <path d="M140 70 Q160 95 162 140 Q160 165 150 170" />
-            <path d="M82 200 L78 270 Q78 295 86 308 L96 308 Q98 290 96 270 L98 220" />
-            <path d="M118 200 L122 270 Q122 295 114 308 L104 308 Q102 290 104 270 L102 220" />
-          </g>
-
-          {/* Hot dots — bigger touch targets, animated rings */}
+          {/* Hot dots overlay — positioned over the skeleton joints */}
           {REGIONS.map((r) => {
             const isActive = r.id === active;
             const isHovered = r.id === hovered;
@@ -125,7 +121,7 @@ export default function BodyRegionDiagram() {
             return (
               <g
                 key={r.id}
-                style={{ cursor: "pointer" }}
+                style={{ cursor: "pointer", outline: "none" }}
                 onClick={() => setActive(r.id)}
                 onMouseEnter={() => setHovered(r.id)}
                 onMouseLeave={() => setHovered(null)}
@@ -135,6 +131,7 @@ export default function BodyRegionDiagram() {
                 role="button"
                 aria-pressed={isActive}
                 aria-label={`Select ${r.label}`}
+                className="focus:outline-none focus-visible:outline-none"
               >
                 {/* Invisible larger hit area (24px) */}
                 <circle cx={r.cx} cy={r.cy} r="18" fill="transparent" />
@@ -195,10 +192,10 @@ export default function BodyRegionDiagram() {
         </p>
       </div>
 
-      {/* ═══ Selectable region cards + active blurb ═══════════════ */}
-      <div className="flex flex-col gap-5">
-        {/* Region chips — full-width grid, big tap targets */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2">
+      {/* ═══ Selectable region pills + active focus card ═══════════ */}
+      <div className="flex flex-col gap-6">
+        {/* Region pills — flex-wrap so labels never truncate */}
+        <div className="flex flex-wrap gap-2">
           {REGIONS.map((r) => {
             const isActive = r.id === active;
             return (
@@ -208,20 +205,19 @@ export default function BodyRegionDiagram() {
                 onMouseEnter={() => setHovered(r.id)}
                 onMouseLeave={() => setHovered(null)}
                 aria-pressed={isActive}
-                className={`group relative overflow-hidden rounded-[12px] px-3 py-2.5 text-caption font-medium transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] hairline ${
+                className={`group relative overflow-hidden rounded-pill px-5 py-2.5 text-body-sm font-medium whitespace-nowrap transition-all duration-300 ease-[cubic-bezier(0.16,1,0.3,1)] border ${
                   isActive
                     ? "bg-clay text-calcium border-clay shadow-soft"
-                    : "bg-calcium text-ink-soft hover:text-ink hover:border-clay/40"
+                    : "bg-calcium text-ink-soft border-line hover:text-ink hover:border-clay/50 hover:bg-clay-soft/40"
                 }`}
               >
-                <span className="relative z-10">{r.short}</span>
-                {/* Hover sweep */}
+                <span className="relative z-10">{r.label}</span>
                 {!isActive && (
                   <span
                     className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                     style={{
                       background:
-                        "linear-gradient(135deg, rgba(0,100,224,0.08), transparent 60%)",
+                        "linear-gradient(135deg, rgba(0,100,224,0.10), transparent 60%)",
                     }}
                     aria-hidden="true"
                   />
@@ -231,31 +227,36 @@ export default function BodyRegionDiagram() {
           })}
         </div>
 
-        {/* Active region card — animated swap */}
-        <div className="relative glow-card glow-card-static bg-calcium rounded-[18px] p-6 md:p-7 overflow-hidden">
+        {/* Active region card — bigger, more prominent */}
+        <div className="relative glow-card glow-card-static bg-calcium rounded-[20px] p-7 md:p-9 overflow-hidden">
           <AnimatePresence mode="wait">
             <motion.div
               key={region.id}
-              initial={prefersReduced ? { opacity: 0 } : { opacity: 0, y: 8 }}
+              initial={prefersReduced ? { opacity: 0 } : { opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
-              exit={prefersReduced ? { opacity: 0 } : { opacity: 0, y: -8 }}
-              transition={{ duration: 0.35, ease: [0.16, 1, 0.3, 1] }}
+              exit={prefersReduced ? { opacity: 0 } : { opacity: 0, y: -10 }}
+              transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
+              className="flex flex-col gap-5"
             >
-              <div className="flex items-center justify-between mb-2">
+              <div className="flex items-start justify-between gap-4">
                 <p className="text-eyebrow text-clay">Focus area</p>
-                <span className="text-caption text-ink-soft bg-bone-deep rounded-pill px-2.5 py-0.5">
-                  Track: {region.trackName}
+                <span className="text-caption font-medium text-sage bg-sage-tint rounded-pill px-3 py-1 whitespace-nowrap">
+                  Track · {region.trackName}
                 </span>
               </div>
 
-              <h4 className="text-h3 font-display text-ink mb-2">{region.label}</h4>
-              <p className="text-body text-ink-soft mb-4">{region.blurb}</p>
+              <div>
+                <h4 className="text-h2 font-display text-ink leading-tight">
+                  {region.label}
+                </h4>
+                <p className="text-body-lg text-ink-soft mt-3">{region.blurb}</p>
+              </div>
 
-              <ul className="flex flex-wrap gap-1.5 mb-5">
+              <ul className="flex flex-wrap gap-2">
                 {region.conditions.map((c) => (
                   <li
                     key={c}
-                    className="text-caption text-ink bg-bone-deep rounded-pill px-3 py-1"
+                    className="text-body-sm font-medium text-ink bg-bone-deep rounded-pill px-4 py-1.5"
                   >
                     {c}
                   </li>
@@ -264,12 +265,12 @@ export default function BodyRegionDiagram() {
 
               <a
                 href={region.track}
-                className="group inline-flex items-center gap-2 text-body-sm font-medium text-clay"
+                className="group inline-flex items-center gap-2 text-body font-medium text-clay hover:text-clay-dark transition-colors duration-200 mt-1"
               >
-                See the {region.trackName} track
+                Explore the {region.trackName} track
                 <svg
-                  width="14"
-                  height="14"
+                  width="16"
+                  height="16"
                   viewBox="0 0 16 16"
                   fill="none"
                   aria-hidden="true"
@@ -278,7 +279,7 @@ export default function BodyRegionDiagram() {
                   <path
                     d="M3 8h10m0 0L9 4m4 4L9 12"
                     stroke="currentColor"
-                    strokeWidth="1.5"
+                    strokeWidth="1.75"
                     strokeLinecap="round"
                     strokeLinejoin="round"
                   />

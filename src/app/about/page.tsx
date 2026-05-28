@@ -254,17 +254,16 @@ export default function AboutPage() {
 
           <Reveal>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5 mb-12">
-              {tracks.map((t, i) => (
+              {tracks.map((t) => (
                 <a
                   key={t.name}
                   href={t.href}
                   className="group glow-card bg-calcium rounded-[18px] p-6 md:p-7 flex flex-col gap-3 h-full"
                 >
                   <div className="flex items-baseline justify-between">
-                    <span className="text-eyebrow text-clay">Track 0{i + 1}</span>
+                    <h4 className="text-h3 font-display text-ink">{t.name}</h4>
                     <span className="text-clay opacity-0 group-hover:opacity-100 transition-opacity duration-200">→</span>
                   </div>
-                  <h4 className="text-h3 font-display text-ink">{t.name}</h4>
                   <p className="text-body-sm text-ink-soft">{t.note}</p>
                 </a>
               ))}

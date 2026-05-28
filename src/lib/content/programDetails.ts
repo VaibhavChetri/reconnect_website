@@ -39,7 +39,6 @@ export type FaqItem = { q: string; a: string };
 export type ProgramDetail = {
   slug: "prevent" | "manage" | "recover";
   name: string;
-  eyebrow: string;
   promise: string;           // h1
   italicWord: string;        // word inside promise that should be italic-clay
   subhead: string;
@@ -79,7 +78,6 @@ export const programDetails: Record<ProgramDetail["slug"], ProgramDetail> = {
   prevent: {
     slug: "prevent",
     name: "Prevent",
-    eyebrow: "Track 01 — Prevent",
     promise: "Protect the joints and bones you’ll need at seventy — starting now.",
     italicWord: "now",
     subhead:
@@ -197,7 +195,6 @@ export const programDetails: Record<ProgramDetail["slug"], ProgramDetail> = {
   manage: {
     slug: "manage",
     name: "Manage",
-    eyebrow: "Track 02 — Manage",
     promise: "Calm the pain first. Then build a stronger body around it.",
     italicWord: "first",
     subhead:
@@ -315,7 +312,6 @@ export const programDetails: Record<ProgramDetail["slug"], ProgramDetail> = {
   recover: {
     slug: "recover",
     name: "Recover",
-    eyebrow: "Track 03 — Recover",
     promise: "Rebuild — carefully, with your doctor in the loop.",
     italicWord: "carefully",
     subhead:

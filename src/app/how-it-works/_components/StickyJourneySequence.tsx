@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, type ComponentType, type SVGProps } from "react";
-import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
+import { useEffect, useRef, useState, type ComponentType, type SVGProps } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import {
   KneeSvg,
   SpineSvg,
@@ -13,11 +13,11 @@ type SvgComponent = ComponentType<{ className?: string } & SVGProps<SVGSVGElemen
 
 export type JourneyStep = {
   number: string;
-  badge: string;        // e.g. "Always first"
+  badge: string;
   title: string;
   body: string;
   bullets: string[];
-  artLabel: string;     // visible label on the sticky panel
+  artLabel: string;
   art: SvgComponent;
 };
 
@@ -83,12 +83,15 @@ const STEPS: JourneyStep[] = [
 export default function StickyJourneySequence() {
   const prefersReduced = useReducedMotion();
 
-  /* ── Reduced motion: stacked vertical sequence, no pinning ── */
+  /* Reduced motion: stacked vertical sequence, no pinning */
   if (prefersReduced) {
     return (
       <ol className="flex flex-col gap-16 md:gap-24">
         {STEPS.map((s) => (
-          <li key={s.number} className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start">
+          <li
+            key={s.number}
+            className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-16 items-start"
+          >
             <div className="lg:col-span-5">
               <StaticArtPanel step={s} />
             </div>
@@ -105,67 +108,119 @@ export default function StickyJourneySequence() {
 }
 
 /* ────────────────────────────────────────────────────────────
-   Animated pinned sequence:
-   - Outer wrapper is tall (≈ steps.length * 100vh).
-   - Sticky left column = visual panel that crossfades between steps.
-   - Right column = step copy blocks in normal flow.
+   Animated pinned sequence (revised):
+   - Wrapper height is determined by the step copy blocks (each is
+     min-h-[80vh]), so the section's total height matches its
+     content. No dead trailing space.
+   - Each step's block uses IntersectionObserver to set itself as
+     the active step when ~50% in view.
+   - Sticky panel shows the active step's art via AnimatePresence
+     so exactly one is visible at a time (no opacity puzzles).
    ──────────────────────────────────────────────────────────── */
 
 function SequenceAnimated() {
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: wrapRef,
-    offset: ["start start", "end end"],
-  });
+  const [active, setActive] = useState(0);
+  const stepRefs = useRef<(HTMLDivElement | null)[]>([]);
+
+  useEffect(() => {
+    const els = stepRefs.current.filter((el): el is HTMLDivElement => el !== null);
+    if (!els.length) return;
+
+    const obs = new IntersectionObserver(
+      (entries) => {
+        // Pick the entry closest to the centre of the viewport
+        const visible = entries
+          .filter((e) => e.isIntersecting)
+          .map((e) => ({
+            idx: Number((e.target as HTMLElement).dataset.idx),
+            top: e.boundingClientRect.top,
+          }));
+        if (!visible.length) return;
+        // Find the one whose top is just past 0 (i.e. centred in viewport)
+        visible.sort((a, b) => Math.abs(a.top - window.innerHeight * 0.4) - Math.abs(b.top - window.innerHeight * 0.4));
+        if (visible[0]) setActive(visible[0].idx);
+      },
+      {
+        // The "active" band sits around 40% of viewport height
+        rootMargin: "-40% 0px -40% 0px",
+        threshold: 0,
+      }
+    );
+
+    els.forEach((el) => obs.observe(el));
+    return () => obs.disconnect();
+  }, []);
+
+  const activeStep = STEPS[active];
 
   return (
-    <div
-      ref={wrapRef}
-      className="relative"
-      style={{ minHeight: `${STEPS.length * 90}vh` }}
-    >
+    <div className="relative">
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16">
         {/* ── Sticky visual panel ─────────────────────────────── */}
         <aside className="lg:col-span-5">
           <div className="sticky top-32">
             <div className="relative aspect-square rounded-[20px] overflow-hidden bg-bone-deep hairline">
-              {STEPS.map((step, i) => {
-                const start = i / STEPS.length;
-                const end = (i + 1) / STEPS.length;
-                return (
-                  <StickyArtFrame
-                    key={step.number}
-                    step={step}
-                    progress={scrollYProgress}
-                    start={start}
-                    end={end}
-                  />
-                );
-              })}
+              {/* x-ray glow background */}
+              <div
+                className="absolute inset-0 pointer-events-none"
+                style={{
+                  background:
+                    "radial-gradient(60% 60% at 50% 55%, rgba(0,100,224,0.10) 0%, transparent 70%)",
+                }}
+                aria-hidden="true"
+              />
+
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={activeStep.number}
+                  initial={{ opacity: 0, scale: 0.96 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 1.04 }}
+                  transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
+                  className="absolute inset-0 flex flex-col items-center justify-center p-10"
+                >
+                  <activeStep.art className="w-60 sm:w-72 md:w-80 text-sage opacity-80" />
+                  <div className="relative mt-6 text-center">
+                    <p className="text-eyebrow text-clay mb-2">{activeStep.number}</p>
+                    <p className="text-h4 font-display text-ink">{activeStep.artLabel}</p>
+                  </div>
+                </motion.div>
+              </AnimatePresence>
 
               {/* progress dots */}
               <div className="absolute top-5 right-5 flex flex-col gap-2 z-10">
-                {STEPS.map((step, i) => {
-                  const start = i / STEPS.length;
-                  const end = (i + 1) / STEPS.length;
-                  return (
-                    <ProgressDot
-                      key={step.number}
-                      progress={scrollYProgress}
-                      start={start}
-                      end={end}
-                    />
-                  );
-                })}
+                {STEPS.map((s, i) => (
+                  <span
+                    key={s.number}
+                    aria-hidden="true"
+                    className={`block w-2 h-2 rounded-full transition-all duration-500 ${
+                      i === active
+                        ? "bg-clay scale-150"
+                        : i < active
+                        ? "bg-clay/40"
+                        : "bg-clay/20"
+                    }`}
+                  />
+                ))}
               </div>
             </div>
           </div>
         </aside>
 
-        {/* ── Step copy column ────────────────────────────────── */}
-        <div className="lg:col-span-7 flex flex-col gap-32 lg:gap-48">
-          {STEPS.map((step) => (
-            <StepCopy key={step.number} step={step} />
+        {/* ── Step copy column — each block is min-h-[80vh] so the
+              sticky panel has enough scroll range to stick ──── */}
+        <div className="lg:col-span-7 flex flex-col">
+          {STEPS.map((step, i) => (
+            <div
+              key={step.number}
+              ref={(el) => {
+                stepRefs.current[i] = el;
+              }}
+              data-idx={i}
+              className="min-h-[80vh] flex items-center py-12"
+            >
+              <StepCopy step={step} />
+            </div>
           ))}
         </div>
       </div>
@@ -173,98 +228,16 @@ function SequenceAnimated() {
   );
 }
 
-/* ── Sticky art frame: crossfades by scroll position ───────── */
-
-function StickyArtFrame({
-  step,
-  progress,
-  start,
-  end,
-}: {
-  step: JourneyStep;
-  progress: ReturnType<typeof useScroll>["scrollYProgress"];
-  start: number;
-  end: number;
-}) {
-  const span = end - start;
-  // Clamp offsets to [0, 1] — WAAPI rejects out-of-range keyframe offsets
-  const clamp = (v: number) => Math.min(1, Math.max(0, v));
-  const o1 = clamp(start - span * 0.25);
-  const o2 = clamp(start + span * 0.15);
-  const o3 = clamp(end - span * 0.15);
-  const o4 = clamp(end + span * 0.25);
-  const opacity = useTransform(progress, [o1, o2, o3, o4], [0, 1, 1, 0]);
-  const scale = useTransform(progress, [start, end], [1, 1.06]);
-  const Art = step.art;
-
-  return (
-    <motion.div
-      style={{ opacity }}
-      className="absolute inset-0 flex flex-col items-center justify-center p-10"
-    >
-      {/* x-ray glow background */}
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(60% 60% at 50% 55%, rgba(0,100,224,0.10) 0%, transparent 70%)",
-        }}
-        aria-hidden="true"
-      />
-
-      <motion.div style={{ scale }} className="relative">
-        <Art className="w-60 sm:w-72 md:w-80 text-sage opacity-80" />
-      </motion.div>
-
-      <div className="relative mt-6 text-center">
-        <p className="text-eyebrow text-clay mb-2">{step.number}</p>
-        <p className="text-h4 font-display text-ink">{step.artLabel}</p>
-      </div>
-    </motion.div>
-  );
-}
-
-/* ── Sticky-panel progress dot ─────────────────────────────── */
-
-function ProgressDot({
-  progress,
-  start,
-  end,
-}: {
-  progress: ReturnType<typeof useScroll>["scrollYProgress"];
-  start: number;
-  end: number;
-}) {
-  const clamp = (v: number) => Math.min(1, Math.max(0, v));
-  const scale = useTransform(progress, [start, (start + end) / 2], [1, 1.6]);
-  const opacity = useTransform(
-    progress,
-    [clamp(start - 0.05), clamp(start + 0.05), clamp(end - 0.05), clamp(end + 0.05)],
-    [0.3, 1, 1, 0.3]
-  );
-  return (
-    <motion.span
-      style={{ scale, opacity }}
-      className="block w-2 h-2 rounded-full bg-clay"
-      aria-hidden="true"
-    />
-  );
-}
-
-/* ── Step copy block (animates in on enter) ────────────────── */
+/* ── Step copy block ────────────────────────────────────────── */
 
 function StepCopy({ step }: { step: JourneyStep }) {
-  const ref = useRef<HTMLDivElement>(null);
-  const { scrollYProgress } = useScroll({
-    target: ref,
-    offset: ["start 85%", "start 35%"],
-  });
-  const opacity = useTransform(scrollYProgress, [0, 1], [0.25, 1]);
-  const y = useTransform(scrollYProgress, [0, 1], [24, 0]);
-
   return (
-    <motion.div ref={ref} style={{ opacity, y }} className="relative">
-      <span className="section-number absolute -top-14 lg:-top-16 -left-2 select-none pointer-events-none">
+    <div className="relative">
+      <span
+        className="absolute -top-12 lg:-top-16 -left-2 select-none pointer-events-none font-display text-line leading-none"
+        style={{ fontSize: "clamp(4rem, 8vw, 7rem)" }}
+        aria-hidden="true"
+      >
         {step.number}
       </span>
 
@@ -283,11 +256,11 @@ function StepCopy({ step }: { step: JourneyStep }) {
           </li>
         ))}
       </ul>
-    </motion.div>
+    </div>
   );
 }
 
-/* ── Static art panel used in reduced-motion fallback ──────── */
+/* ── Static art panel for the reduced-motion fallback ─────── */
 
 function StaticArtPanel({ step }: { step: JourneyStep }) {
   const Art = step.art;

@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Section from "@/components/Section";
 import SectionHeader from "@/components/SectionHeader";
-import Eyebrow from "@/components/Eyebrow";
 import Reveal from "@/components/Reveal";
 import Stagger from "@/components/Stagger";
 import Button from "@/components/Button";
@@ -49,11 +48,8 @@ export default function ProgramDetailTemplate({ slug }: ProgramDetailTemplatePro
         <div className="container-site relative">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center">
             <div className="lg:col-span-7 xray-glow">
-              <Reveal>
-                <Eyebrow>{data.eyebrow}</Eyebrow>
-              </Reveal>
               <Reveal delay={0.1}>
-                <h1 className="text-hero text-ink mt-6">
+                <h1 className="text-hero text-ink">
                   {renderPromise(data.promise, data.italicWord)}
                 </h1>
               </Reveal>

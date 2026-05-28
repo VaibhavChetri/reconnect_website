@@ -19,10 +19,11 @@ export default function HeroMedia() {
     return (
       // eslint-disable-next-line @next/next/no-img-element
       <img
-        src="/woman-dumbbell.jpg"
+        src="/hero-poster.jpg"
         alt=""
         aria-hidden="true"
-        className="absolute inset-0 w-full h-full object-cover object-center min-w-full min-h-full scale-[1.35]"
+        className="absolute inset-0 w-full h-full object-cover object-center"
+        style={{ transform: "scale(1.85)", transformOrigin: "center center" }}
       />
     );
   }
@@ -30,7 +31,7 @@ export default function HeroMedia() {
   return (
     <video
       src="/hero-loop.mp4"
-      poster="/woman-dumbbell.jpg"
+      poster="/hero-poster.jpg"
       autoPlay
       muted
       loop

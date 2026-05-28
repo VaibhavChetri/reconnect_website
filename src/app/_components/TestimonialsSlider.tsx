@@ -4,16 +4,22 @@ import { useCallback, useEffect, useState } from "react";
 import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { testimonials } from "@/lib/content/testimonials";
 
+const AUTO_ADVANCE_MS = 7000;
+
 export default function TestimonialsSlider() {
   const [i, setI] = useState(0);
   const [dir, setDir] = useState<1 | -1>(1);
+  const [paused, setPaused] = useState(false);
   const prefersReduced = useReducedMotion();
   const total = testimonials.length;
 
-  const go = useCallback((newI: number, direction: 1 | -1) => {
-    setDir(direction);
-    setI(((newI % total) + total) % total);
-  }, [total]);
+  const go = useCallback(
+    (newI: number, direction: 1 | -1) => {
+      setDir(direction);
+      setI(((newI % total) + total) % total);
+    },
+    [total]
+  );
 
   const next = useCallback(() => go(i + 1, 1), [i, go]);
   const prev = useCallback(() => go(i - 1, -1), [i, go]);
@@ -28,18 +34,30 @@ export default function TestimonialsSlider() {
     return () => window.removeEventListener("keydown", onKey);
   }, [next, prev]);
 
+  /* Auto-advance (paused on hover or reduced-motion) */
+  useEffect(() => {
+    if (paused || prefersReduced) return;
+    const id = setTimeout(next, AUTO_ADVANCE_MS);
+    return () => clearTimeout(id);
+  }, [i, paused, prefersReduced, next]);
+
   const t = testimonials[i];
 
   return (
-    <div className="relative">
-      <div className="overflow-hidden">
+    <div
+      className="relative"
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+    >
+      {/* ═══ Slide content ═════════════════════════════════════════════ */}
+      <div className="relative overflow-hidden">
         <AnimatePresence mode="wait" custom={dir}>
           <motion.article
             key={t.name}
             custom={dir}
-            initial={prefersReduced ? { opacity: 0 } : { opacity: 0, x: dir * 32 }}
+            initial={prefersReduced ? { opacity: 0 } : { opacity: 0, x: dir * 40 }}
             animate={prefersReduced ? { opacity: 1 } : { opacity: 1, x: 0 }}
-            exit={prefersReduced ? { opacity: 0 } : { opacity: 0, x: -dir * 32 }}
+            exit={prefersReduced ? { opacity: 0 } : { opacity: 0, x: -dir * 40 }}
             transition={{ duration: 0.55, ease: [0.16, 1, 0.3, 1] }}
             className="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-center"
           >
@@ -87,51 +105,54 @@ export default function TestimonialsSlider() {
         </AnimatePresence>
       </div>
 
-      {/* Controls */}
-      <div className="mt-10 flex items-center justify-between gap-6 border-t border-line pt-6">
-        <div className="flex items-center gap-2" role="tablist" aria-label="Testimonial slides">
-          {testimonials.map((_, idx) => (
-            <button
-              key={idx}
-              role="tab"
-              aria-selected={idx === i}
-              aria-label={`Slide ${idx + 1}`}
-              onClick={() => go(idx, idx > i ? 1 : -1)}
-              className={`h-1.5 rounded-full transition-all duration-300 ${
-                idx === i ? "w-8 bg-clay" : "w-4 bg-line hover:bg-ink-soft/40"
-              }`}
+      {/* ═══ Bottom: dot pagination + progress bar ═══════════════════ */}
+      <div className="mt-10 pt-6 border-t border-line flex flex-col gap-5">
+        {/* Progress bar (resets each slide) */}
+        {!prefersReduced && (
+          <div className="h-px bg-line overflow-hidden">
+            <motion.div
+              key={`progress-${i}-${paused}`}
+              className="h-full bg-clay"
+              initial={{ width: "0%" }}
+              animate={{ width: paused ? "0%" : "100%" }}
+              transition={{
+                duration: paused ? 0 : AUTO_ADVANCE_MS / 1000,
+                ease: "linear",
+              }}
             />
-          ))}
-        </div>
+          </div>
+        )}
 
-        <div className="flex items-center gap-3">
-          <ArrowButton onClick={prev} direction="left" />
-          <ArrowButton onClick={next} direction="right" />
+        <div className="flex items-center justify-between gap-6">
+          <div
+            className="flex items-center gap-2"
+            role="tablist"
+            aria-label="Testimonial slides"
+          >
+            {testimonials.map((slide, idx) => (
+              <button
+                key={slide.name}
+                role="tab"
+                aria-selected={idx === i}
+                aria-label={`Slide ${idx + 1}: ${slide.name}`}
+                onClick={() => go(idx, idx > i ? 1 : -1)}
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  idx === i
+                    ? "w-10 bg-clay"
+                    : "w-5 bg-line hover:bg-ink-soft/40"
+                }`}
+              />
+            ))}
+          </div>
+
+          <p className="text-caption text-ink-soft italic hidden sm:block">
+            Stories shared with explicit consent. Outcomes vary by individual.
+          </p>
         </div>
       </div>
-
-      <p className="text-caption text-ink-soft mt-6 italic">
-        Stories shared with explicit consent. Outcomes vary by individual.
-      </p>
     </div>
   );
 }
 
-function ArrowButton({ onClick, direction }: { onClick: () => void; direction: "left" | "right" }) {
-  return (
-    <button
-      onClick={onClick}
-      aria-label={direction === "left" ? "Previous" : "Next"}
-      className="w-11 h-11 rounded-full border border-line text-ink hover:border-clay hover:text-clay transition-colors duration-300 flex items-center justify-center"
-    >
-      <svg
-        width="16" height="16" viewBox="0 0 16 16" fill="none"
-        stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"
-        className={direction === "left" ? "rotate-180" : ""}
-        aria-hidden="true"
-      >
-        <path d="M3 8h10m0 0L9 4m4 4L9 12" />
-      </svg>
-    </button>
-  );
-}
+// (Manual prev/next arrows removed — auto-advance + hover-pause + keyboard ←→
+// handle navigation now.)
